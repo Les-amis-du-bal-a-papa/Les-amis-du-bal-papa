@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Les Amis du Bal à Papa – Cours de danse à Chambéry</title>
+  <meta name="description" content="Association Les Amis du Bal à Papa : danse de salon, thés dansants et gym douce dansée à Chambéry. Agenda, inscriptions et contact.">
+  <meta name="theme-color" content="#1b2d5b">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- Lien d'évitement pour clavier et lecteurs d'écran -->
+  <a class="skip-link" href="#contenu">Aller directement au contenu</a>
+
+  <!-- ================= EN-TÊTE ================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#accueil">
+        <img src="images/logo.png" alt="Les Amis du Bal à Papa – retour à l'accueil" width="919" height="329">
+      </a>
+
+      <div class="header-tools">
+        <div class="text-size" role="group" aria-label="Taille du texte">
+          <button type="button" class="btn-size" data-size="normal" aria-pressed="true" title="Texte normal">A</button>
+          <button type="button" class="btn-size btn-size--lg" data-size="large" aria-pressed="false" title="Texte grand">A+</button>
+          <button type="button" class="btn-size btn-size--xl" data-size="xlarge" aria-pressed="false" title="Texte très grand">A++</button>
+        </div>
+
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">
+          <span class="menu-toggle-icon" aria-hidden="true"></span>
+          <span class="menu-toggle-label">Menu</span>
+        </button>
+      </div>
+
+      <nav class="main-nav" aria-label="Menu principal">
+        <ul id="menu-principal">
+          <li><a href="#accueil">Accueil</a></li>
+          <li><a href="#cours">Nos bals</a></li>
+          <li><a href="#agenda">Agenda</a></li>
+          <li><a href="#galerie">Galerie</a></li>
+          <li><a href="#contact">Contact &amp; accès</a></li>
+          <li><a href="#inscription" class="nav-cta">S'inscrire</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Bandeau d'annonce (géré depuis l'espace administrateur : Infos pratiques) -->
+  <div class="annonce" id="annonce" role="status" hidden>
+    <div class="container annonce-inner">
+      <span class="annonce-icon" aria-hidden="true">📢</span>
+      <p id="annonce-texte"></p>
+    </div>
+  </div>
+
+  <main id="contenu" tabindex="-1">
+
+    <!-- ================= 1. ACCUEIL ================= -->
+    <section id="accueil" class="section hero" aria-labelledby="titre-accueil">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">Association de danse à Chambéry</p>
+          <h1 id="titre-accueil">Bienvenue chez les Amis du Bal à Papa&nbsp;!</h1>
+          <p class="lead">
+            Rock, tango, valse, cha-cha, fox-trot, paso doble, bachata, danse en ligne…
+            Notre association fait vivre la danse de bal à Chambéry, dans la bonne humeur.
+          </p>
+          <p>
+            Tout au long de l'année, nous organisons des après-midis dansants de 15&nbsp;h à 18&nbsp;h,
+            avec buvette et pâtisseries. Venez seul, en couple ou entre amis&nbsp;:
+            débutants comme danseurs confirmés, tout le monde est le bienvenu sur la piste.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#agenda">Voir l'agenda &amp; S'inscrire</a>
+            <a class="btn btn-secondary" href="tel:+33769114150">Appeler le 07&nbsp;69&nbsp;11&nbsp;41&nbsp;50</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="images/logo.png" alt="Logo de l'association Les Amis du Bal à Papa" width="919" height="329">
+        </div>
+      </div>
+
+      <div class="container">
+        <ul class="highlights" aria-label="L'association en bref">
+          <li>
+            <span class="highlight-icon" aria-hidden="true">🎶</span>
+            <strong>Des bals toute l'année</strong>
+            <span>De 15&nbsp;h à 18&nbsp;h, dans trois salles de Chambéry</span>
+          </li>
+          <li>
+            <span class="highlight-icon" aria-hidden="true">💃</span>
+            <strong>Tous les styles de bal</strong>
+            <span>Danses à deux et danse en ligne</span>
+          </li>
+          <li>
+            <span class="highlight-icon" aria-hidden="true">☕</span>
+            <strong>Buvette &amp; pâtisseries</strong>
+            <span>Pour faire une pause entre deux danses</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= 2. COURS ================= -->
+    <section id="cours" class="section section-alt" aria-labelledby="titre-cours">
+      <div class="container">
+        <h2 id="titre-cours">Nos bals &amp; styles de danse</h2>
+        <p class="section-intro">
+          Notre association a pour objectif de promouvoir la danse de bal.
+          On y danse notamment&nbsp;:
+        </p>
+
+        <!-- Contenu géré depuis l'espace administrateur (data/infos.json) -->
+        <ul class="styles" id="styles" aria-label="Styles de danse">
+          <li>Rock</li><li>Tango</li><li>Valse</li><li>Cha-cha</li><li>Fox-trot</li>
+          <li>Paso doble</li><li>Bachata</li><li>Danse en ligne</li>
+        </ul>
+
+        <!-- Contenu géré depuis l'espace administrateur (data/cours.json) -->
+        <div class="cards" id="cours-cards">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">🎶</div>
+            <h3>Les bals</h3>
+            <p>Des après-midis dansants en musique, dans une ambiance conviviale, pour danser à deux ou en ligne.</p>
+            <dl class="card-details">
+              <div><dt>Horaires</dt><dd>15&nbsp;h – 18&nbsp;h, billetterie dès 14&nbsp;h&nbsp;20</dd></div>
+              <div><dt>Fréquence</dt><dd>21 bals prévus en 2027</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <!-- Contenu géré depuis l'espace administrateur (data/infos.json) -->
+        <aside class="info-box" aria-labelledby="titre-pratique">
+          <h3 id="titre-pratique">Infos pratiques</h3>
+          <dl class="pratique" id="pratique">
+            <div><dt>Horaires</dt><dd>15&nbsp;h – 18&nbsp;h</dd></div>
+            <div><dt>Billetterie</dt><dd>Ouverture à 14&nbsp;h&nbsp;20</dd></div>
+            <div><dt>Entrée</dt><dd>10&nbsp;€</dd></div>
+            <div><dt>Adhérents</dt><dd>45&nbsp;€ pour l'année</dd></div>
+            <div><dt>Buvette</dt><dd>Dès 14&nbsp;h&nbsp;20 – vente de pâtisseries à partir de 16&nbsp;h</dd></div>
+          </dl>
+          <p class="pratique-note">Règlement sur place, aucun paiement en ligne.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= 3. AGENDA ================= -->
+    <section id="agenda" class="section" aria-labelledby="titre-agenda">
+      <div class="container">
+        <h2 id="titre-agenda">Agenda du trimestre</h2>
+        <p class="section-intro">
+          Retrouvez nos bals, stages et réunions. Les jours avec un événement
+          sont signalés dans le calendrier&nbsp;; la liste détaillée se trouve juste en dessous.
+          L'agenda du trimestre est aussi distribué sur papier à chaque bal.
+        </p>
+
+        <div class="agenda-controls">
+          <button type="button" class="btn btn-nav" id="agenda-prev">
+            <span aria-hidden="true">←</span> Trimestre précédent
+          </button>
+          <p class="agenda-period" id="agenda-period" aria-live="polite"></p>
+          <button type="button" class="btn btn-nav" id="agenda-next">
+            Trimestre suivant <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <fieldset class="agenda-filters">
+          <legend>Afficher&nbsp;:</legend>
+          <label class="filter filter--stage">
+            <input type="checkbox" value="stage" checked>
+            <span><span class="badge-icon" aria-hidden="true">★</span> Stages de danse</span>
+          </label>
+          <label class="filter filter--the">
+            <input type="checkbox" value="the" checked>
+            <span><span class="badge-icon" aria-hidden="true">♫</span> Bals &amp; thés dansants</span>
+          </label>
+          <label class="filter filter--ag">
+            <input type="checkbox" value="ag" checked>
+            <span><span class="badge-icon" aria-hidden="true">■</span> Assemblée générale &amp; réunions</span>
+          </label>
+        </fieldset>
+
+        <div class="calendar" id="calendar"></div>
+
+        <h3 class="agenda-list-title">Liste des événements du trimestre</h3>
+        <ol class="event-list" id="event-list"></ol>
+        <p class="event-empty" id="event-empty" hidden>Aucun événement prévu sur cette période pour les catégories choisies.</p>
+
+        <p class="agenda-cta">
+          <a class="btn btn-primary" href="#inscription">Je me pré-inscris</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= PRÉ-INSCRIPTION ================= -->
+    <section id="inscription" class="section section-alt" aria-labelledby="titre-inscription">
+      <div class="container container-narrow">
+        <h2 id="titre-inscription">Pré-inscription</h2>
+        <p class="section-intro">
+          Remplissez ce formulaire&nbsp;: nous vous rappellerons pour confirmer.
+          <strong>Aucun paiement en ligne</strong>&nbsp;: le règlement se fait sur place, à la billetterie d'un bal.
+        </p>
+        <p class="form-note">Les champs marqués d'un astérisque (<span class="req" aria-hidden="true">*</span>) sont obligatoires.</p>
+
+        <div class="form-summary" id="form-summary" role="alert" tabindex="-1" hidden></div>
+        <div class="form-success" id="form-success" role="status" tabindex="-1" hidden></div>
+
+        <!-- Remplacez XXXXX par votre identifiant Formspree -->
+        <form id="form-inscription" class="form" action="https://formspree.io/f/XXXXX" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Nouvelle pré-inscription – Les Amis du Bal à Papa">
+          <!-- Piège anti-spam : ne pas remplir -->
+          <p class="visually-hidden" aria-hidden="true">
+            <label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          </p>
+
+          <fieldset>
+            <legend>Vos informations</legend>
+
+            <div class="field">
+              <label for="nom">Nom et prénom <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="nom" name="nom_prenom" autocomplete="name" required aria-describedby="nom-err">
+              <p class="field-error" id="nom-err" hidden>Indiquez votre nom et votre prénom.</p>
+            </div>
+
+            <div class="field">
+              <label for="naissance">Date de naissance <span class="req" aria-hidden="true">*</span></label>
+              <input type="date" id="naissance" name="date_naissance" autocomplete="bday" required min="1915-01-01" aria-describedby="naissance-aide naissance-err">
+              <p class="field-help" id="naissance-aide">Exemple&nbsp;: 14/07/1950</p>
+              <p class="field-error" id="naissance-err" hidden>Indiquez votre date de naissance.</p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="tel">Téléphone <span class="req" aria-hidden="true">*</span></label>
+                <input type="tel" id="tel" name="telephone" autocomplete="tel" inputmode="tel" required pattern="[0-9 +().\-]{10,20}" aria-describedby="tel-aide tel-err">
+                <p class="field-help" id="tel-aide">Exemple&nbsp;: 06 12 34 56 78</p>
+                <p class="field-error" id="tel-err" hidden>Indiquez un numéro de téléphone valide (10 chiffres).</p>
+              </div>
+
+              <div class="field">
+                <label for="email">Adresse e-mail <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-aide email-err">
+                <p class="field-help" id="email-aide">Exemple&nbsp;: prenom.nom@exemple.fr</p>
+                <p class="field-error" id="email-err" hidden>Indiquez une adresse e-mail valide.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="activite">Activité souhaitée</label>
+              <select id="activite" name="activite">
+                <option value="">— Je ne sais pas encore —</option>
+                <option>Adhésion annuelle</option>
+                <option>Participer aux bals</option>
+                <option>Stages de danse (à partir de janvier 2027)</option>
+                <option>Danse en ligne</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Personne à contacter en cas d'urgence</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="urgence-nom">Nom et prénom <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="urgence-nom" name="urgence_nom" required aria-describedby="urgence-nom-err">
+                <p class="field-error" id="urgence-nom-err" hidden>Indiquez le nom de la personne à prévenir.</p>
+              </div>
+              <div class="field">
+                <label for="urgence-tel">Téléphone <span class="req" aria-hidden="true">*</span></label>
+                <input type="tel" id="urgence-tel" name="urgence_telephone" inputmode="tel" required pattern="[0-9 +().\-]{10,20}" aria-describedby="urgence-tel-err">
+                <p class="field-error" id="urgence-tel-err" hidden>Indiquez le téléphone de la personne à prévenir.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="choice-group" aria-describedby="image-aide image-err">
+            <legend>Droit à l'image <span class="req" aria-hidden="true">*</span></legend>
+            <p class="field-help" id="image-aide">
+              Acceptez-vous d'apparaître sur les photos et vidéos publiées sur ce site&nbsp;?
+              Votre réponse est obligatoire, mais refuser ne change rien à votre inscription.
+            </p>
+            <label class="choice">
+              <input type="radio" name="droit_image" value="J'autorise" required>
+              <span>Oui, j'autorise l'association à publier des photos et vidéos où j'apparais.</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="droit_image" value="Je refuse">
+              <span>Non, je ne souhaite pas apparaître sur les photos et vidéos.</span>
+            </label>
+            <p class="field-error" id="image-err" hidden>Merci de choisir une réponse concernant le droit à l'image.</p>
+          </fieldset>
+
+          <div class="field">
+            <label class="choice">
+              <input type="checkbox" id="rgpd" name="consentement_rgpd" value="Oui" required aria-describedby="rgpd-err">
+              <span>
+                J'accepte que mes données soient utilisées par l'association Les Amis du Bal à Papa
+                uniquement pour gérer mon inscription. <span class="req" aria-hidden="true">*</span>
+                <a href="#donnees-personnelles">En savoir plus sur mes données</a>
+              </span>
+            </label>
+            <p class="field-error" id="rgpd-err" hidden>Vous devez accepter l'utilisation de vos données pour envoyer le formulaire.</p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="form-submit">Envoyer ma pré-inscription</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= 4. GALERIE ================= -->
+    <section id="galerie" class="section" aria-labelledby="titre-galerie">
+      <div class="container">
+        <h2 id="titre-galerie">Galerie photos</h2>
+        <p class="section-intro">Quelques souvenirs de nos après-midis dansants.</p>
+
+        <!-- Contenu géré depuis l'espace administrateur (data/galerie.json) -->
+        <ul class="gallery" id="gallery">
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="L'ambiance du bal">Photo à venir</div><figcaption>L'ambiance du bal</figcaption></figure></li>
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="Sur la piste">Photo à venir</div><figcaption>Sur la piste</figcaption></figure></li>
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="Danse en ligne">Photo à venir</div><figcaption>Danse en ligne</figcaption></figure></li>
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="Les musiciens">Photo à venir</div><figcaption>Les musiciens</figcaption></figure></li>
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="La buvette et les pâtisseries">Photo à venir</div><figcaption>La buvette et les pâtisseries</figcaption></figure></li>
+          <li><figure><div class="gallery-placeholder" role="img" aria-label="Entre amis">Photo à venir</div><figcaption>Entre amis</figcaption></figure></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= 5. CONTACT & ACCÈS ================= -->
+    <section id="contact" class="section section-alt" aria-labelledby="titre-contact">
+      <div class="container">
+        <h2 id="titre-contact">Contact &amp; accès</h2>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Nous contacter</h3>
+            <p>Michel Rutigliano, responsable de l'association, se fera un plaisir de vous répondre.</p>
+            <ul class="contact-list">
+              <li>
+                <span class="contact-label">Téléphone</span>
+                <a class="btn btn-secondary btn-block" href="tel:+33769114150">
+                  <span aria-hidden="true">📞</span> 07&nbsp;69&nbsp;11&nbsp;41&nbsp;50
+                </a>
+              </li>
+              <li>
+                <span class="contact-label">E-mail</span>
+                <a class="btn btn-secondary btn-block" href="mailto:lesamisdubal@gmail.com">
+                  <span aria-hidden="true">✉️</span> lesamisdubal@gmail.com
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="contact-card">
+            <h3>Nos salles à Chambéry</h3>
+            <p>Les bals ont lieu principalement dans trois salles de Chambéry.
+              La salle de chaque bal est indiquée dans l'agenda.</p>
+
+            <!-- Contenu géré depuis l'espace administrateur (data/infos.json) -->
+            <ul class="salles-list" id="salles">
+              <li>Le Cœur de Mérande</li>
+              <li>Le Scarabée</li>
+              <li>La Bisseraine</li>
+            </ul>
+            <p>Pour connaître l'adresse exacte d'une salle, appelez-nous ou écrivez-nous.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= PIED DE PAGE ================= -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h2 class="footer-title">Les Amis du Bal à Papa</h2>
+        <p>Association déclarée régie par la loi du 1<sup>er</sup> juillet 1901</p>
+        <p>
+          <a href="tel:+33769114150">07&nbsp;69&nbsp;11&nbsp;41&nbsp;50</a><br>
+          <a href="mailto:lesamisdubal@gmail.com">lesamisdubal@gmail.com</a>
+        </p>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Mentions légales</h2>
+        <p><strong>LES AMIS DU BAL A PAPA</strong> | SIREN&nbsp;: <strong>441&nbsp;810&nbsp;132</strong> | SIRET&nbsp;: <strong>441&nbsp;810&nbsp;132&nbsp;00031</strong></p>
+        <p>Siège social&nbsp;: 277 avenue du Covet, 73000 Chambéry</p>
+        <p>Directeur de la publication&nbsp;: Michel Rutigliano</p>
+        <p>TVA non applicable – exonération conformément à l'article 261-7-1° du CGI</p>
+        <p>Hébergement&nbsp;: GitHub Inc. (GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis</p>
+      </div>
+
+      <div id="donnees-personnelles">
+        <h2 class="footer-title">Données personnelles (RGPD)</h2>
+        <p>
+          Les informations du formulaire de pré-inscription servent uniquement à la gestion des
+          adhésions de l'association. Elles ne sont ni vendues ni cédées. Elles sont conservées
+          pendant la durée de l'adhésion, puis 3 ans maximum après le dernier contact.
+        </p>
+        <p>
+          Vous pouvez demander à consulter, rectifier ou supprimer vos données en écrivant à
+          <a href="mailto:lesamisdubal@gmail.com">lesamisdubal@gmail.com</a>.
+          Vous pouvez aussi adresser une réclamation à la CNIL (cnil.fr).
+        </p>
+        <p>Ce site n'utilise aucun cookie publicitaire ni outil de suivi.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© <span id="annee">2027</span> Les Amis du Bal à Papa – Chambéry</p>
+        <a href="admin.html" class="admin-link">Espace gestionnaires</a>
+        <a href="#accueil" class="back-to-top">Revenir en haut de la page <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

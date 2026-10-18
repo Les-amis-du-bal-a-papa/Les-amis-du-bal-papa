@@ -1,0 +1,174 @@
+# =========================================================
+# Espace administrateur – Les Amis du Bal à Papa
+# Configuration de Pages CMS (https://pagescms.org)
+# Ce fichier décrit les formulaires proposés aux gestionnaires.
+# =========================================================
+
+media:
+  input: images/galerie
+  output: /images/galerie
+  rename: safe
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+
+  # ---------- AGENDA ----------
+  - name: agenda
+    label: "📅 Agenda (bals, stages, réunions)"
+    type: file
+    path: data/agenda.json
+    format: json
+    list: true
+    fields:
+      - name: date
+        label: "Date"
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: titre
+        label: "Titre (ex. : Bal avec le duo Jacky et Sandrine Guilloux)"
+        type: string
+        required: true
+      - name: type
+        label: "Catégorie"
+        type: select
+        required: true
+        options:
+          values:
+            - name: the
+              label: "Bal ou thé dansant"
+            - name: stage
+              label: "Stage de danse"
+            - name: ag
+              label: "Assemblée générale ou réunion"
+      - name: heure
+        label: "Horaires (ex. : 15 h – 18 h, billetterie dès 14 h 20)"
+        type: string
+      - name: lieu
+        label: "Salle"
+        type: select
+        options:
+          values:
+            - name: "Le Cœur de Mérande, Chambéry"
+              label: "Le Cœur de Mérande"
+            - name: "Le Scarabée, Chambéry"
+              label: "Le Scarabée"
+            - name: "La Bisseraine, Chambéry"
+              label: "La Bisseraine"
+      - name: details
+        label: "Informations complémentaires (orchestre, tarif…) – facultatif"
+        type: text
+
+  # ---------- ACTIVITÉS ----------
+  - name: cours
+    label: "💃 Nos activités (bals, stages, danse en ligne)"
+    type: file
+    path: data/cours.json
+    format: json
+    list: true
+    fields:
+      - name: icone
+        label: "Pictogramme"
+        type: select
+        options:
+          values:
+            - name: "🎶"
+              label: "🎶 Musique"
+            - name: "💃"
+              label: "💃 Danseuse"
+            - name: "🕺"
+              label: "🕺 Danseur"
+            - name: "⭐"
+              label: "⭐ Étoile"
+            - name: "☕"
+              label: "☕ Tasse"
+            - name: "🤝"
+              label: "🤝 Convivialité"
+      - name: titre
+        label: "Nom de l'activité"
+        type: string
+        required: true
+      - name: description
+        label: "Description"
+        type: text
+      - name: niveaux
+        label: "Pour qui (ex. : tous niveaux)"
+        type: string
+      - name: rythme
+        label: "Fréquence (ex. : 21 bals prévus en 2027)"
+        type: string
+      - name: quand
+        label: "Horaires"
+        type: string
+
+  # ---------- GALERIE ----------
+  - name: galerie
+    label: "🖼️ Galerie photos"
+    type: file
+    path: data/galerie.json
+    format: json
+    list: true
+    fields:
+      - name: image
+        label: "Photo"
+        type: image
+      - name: legende
+        label: "Légende affichée sous la photo"
+        type: string
+      - name: description
+        label: "Description de la photo (lue aux personnes malvoyantes)"
+        type: string
+
+  # ---------- INFOS PRATIQUES ----------
+  - name: infos
+    label: "ℹ️ Annonce, tarifs & salles"
+    type: file
+    path: data/infos.json
+    format: json
+    fields:
+      - name: annonce
+        label: "Bandeau d'annonce (en haut du site)"
+        type: object
+        fields:
+          - name: afficher
+            label: "Afficher l'annonce sur le site"
+            type: boolean
+          - name: texte
+            label: "Texte de l'annonce (ex. : prochain bal, bal annulé, changement de salle)"
+            type: text
+      - name: styles
+        label: "Styles de danse affichés"
+        type: string
+        list: true
+      - name: pratique
+        label: "Infos pratiques"
+        type: object
+        fields:
+          - name: horaires
+            label: "Horaires des bals"
+            type: string
+          - name: billetterie
+            label: "Billetterie"
+            type: string
+          - name: entree
+            label: "Prix d'entrée"
+            type: string
+          - name: adhesion
+            label: "Tarif adhérents"
+            type: string
+          - name: buvette
+            label: "Buvette et pâtisseries"
+            type: string
+      - name: salles
+        label: "Salles (nom uniquement, sans adresse)"
+        type: object
+        list: true
+        fields:
+          - name: nom
+            label: "Nom de la salle"
+            type: string
+            required: true
+          - name: infos
+            label: "Information complémentaire (facultatif)"
+            type: string

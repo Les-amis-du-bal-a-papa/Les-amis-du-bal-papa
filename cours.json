@@ -1,0 +1,26 @@
+[
+  {
+    "icone": "🎶",
+    "titre": "Les bals",
+    "description": "Des après-midis dansants en musique, dans une ambiance conviviale, pour danser à deux ou en ligne.",
+    "niveaux": "Tous niveaux, pour le plaisir",
+    "rythme": "21 bals prévus en 2027",
+    "quand": "15 h – 18 h, billetterie dès 14 h 20"
+  },
+  {
+    "icone": "⭐",
+    "titre": "Stages de danse",
+    "description": "Pour apprendre de nouveaux pas ou se perfectionner. Les stages sont en préparation.",
+    "niveaux": "",
+    "rythme": "À partir de janvier 2027",
+    "quand": "Dates annoncées dans l'agenda"
+  },
+  {
+    "icone": "💃",
+    "titre": "Danse en ligne",
+    "description": "Pas besoin de partenaire : chacun danse à sa place, tous ensemble sur la même chorégraphie.",
+    "niveaux": "Ouvert à tous",
+    "rythme": "",
+    "quand": ""
+  }
+]
