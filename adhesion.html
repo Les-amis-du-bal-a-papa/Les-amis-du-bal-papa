@@ -30,14 +30,6 @@
     <nav class="main-nav" id="main-nav" aria-label="Menu principal">
       <ul class="container nav-list" id="menu-principal">
         <li class="nav-item">
-          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-bal">Bal à papa</button>
-          <ul class="sub-menu" id="sub-bal">
-            <li><a href="bal-a-papa.html">L'association</a></li>
-            <li><a href="bal-a-papa.html#salles">Nos salles</a></li>
-            <li><a href="bal-a-papa.html#infos-pratiques">Infos pratiques</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
           <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-stages">Stages et cours</button>
           <ul class="sub-menu" id="sub-stages">
             <li><a href="stages-et-cours.html">Stages et cours</a></li>
@@ -76,11 +68,26 @@
       <div class="container container-narrow">
         <h1 class="section-title" id="titre-adhesion">Adhésion</h1>
         <span class="separator separator-center" aria-hidden="true"></span>
-        <p class="lead center">
-          Adhésion&nbsp;: <strong>45&nbsp;€ pour l'année</strong>. Remplissez ce formulaire de pré-inscription,
-          nous vous recontacterons pour la confirmer.
-        </p>
-        <p class="center">Aucun paiement en ligne&nbsp;: le règlement se fait sur place, à la billetterie d'un bal.</p>
+        <p class="lead center">Deux façons de nous rejoindre. Aucun paiement en ligne&nbsp;: le règlement se fait sur place, à la billetterie.</p>
+
+        <ul class="choices">
+          <li class="choice-card">
+            <h2>Adhésion à l'année</h2>
+            <p class="choice-price">45&nbsp;€ pour l'année</p>
+            <p>Pour venir danser toute la saison et soutenir l'association.</p>
+            <a class="btn" href="#adhesion-annuelle">Adhérer</a>
+          </li>
+          <li class="choice-card">
+            <h2>Un seul évènement</h2>
+            <p class="choice-price">Entrée 10&nbsp;€</p>
+            <p>Pour réserver sa place à un bal ou à un stage, sans adhérer.</p>
+            <a class="btn" href="#inscription-evenement">M'inscrire à un évènement</a>
+          </li>
+        </ul>
+
+        <h2 class="form-title" id="adhesion-annuelle">Adhésion à l'année</h2>
+        <span class="separator separator-center" aria-hidden="true"></span>
+        <p class="center">Remplissez ce formulaire de pré-inscription&nbsp;: nous vous recontacterons pour la confirmer.</p>
         <p class="note center">Les champs marqués d'un astérisque (<span class="req" aria-hidden="true">*</span>) sont obligatoires.</p>
 
         <div class="form-summary" id="form-summary" role="alert" tabindex="-1" hidden></div>
@@ -178,6 +185,114 @@
 
           <p class="center">
             <button type="submit" class="btn btn-large" id="form-submit">Envoyer ma pré-inscription</button>
+          </p>
+        </form>
+
+        <!-- ===== Inscription à un seul évènement ===== -->
+        <h2 class="form-title" id="inscription-evenement">Inscription à un évènement</h2>
+        <span class="separator separator-center" aria-hidden="true"></span>
+        <p class="center">Réservez votre place pour un bal ou un stage précis. L'entrée se règle sur place, le jour même.</p>
+        <p class="note center">Les champs marqués d'un astérisque (<span class="req" aria-hidden="true">*</span>) sont obligatoires.</p>
+
+        <div class="form-summary" id="ev-summary" role="alert" tabindex="-1" hidden></div>
+        <div class="form-success" id="ev-success" role="status" tabindex="-1" hidden></div>
+
+        <!-- Même identifiant Formspree que le formulaire d'adhésion -->
+        <form id="form-evenement" class="form" action="https://formspree.io/f/XXXXX" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Inscription à un évènement – Les amis du bal à Papa">
+          <input type="hidden" name="type_inscription" value="Évènement unique">
+          <p class="visually-hidden" aria-hidden="true">
+            <label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          </p>
+
+          <fieldset>
+            <legend>L'évènement</legend>
+            <div class="field">
+              <label for="ev-choix">Évènement choisi <span class="req" aria-hidden="true">*</span></label>
+              <!-- La liste est remplie automatiquement avec les évènements à venir de l'agenda -->
+              <select id="ev-choix" name="evenement" required aria-describedby="ev-choix-err">
+                <option value="">— Choisissez un évènement —</option>
+              </select>
+              <p class="field-error" id="ev-choix-err" hidden>Choisissez l'évènement auquel vous voulez participer.</p>
+            </div>
+            <div class="field">
+              <label for="ev-places">Nombre de personnes <span class="req" aria-hidden="true">*</span></label>
+              <select id="ev-places" name="nombre_personnes" required aria-describedby="ev-places-aide">
+                <option value="1">1 personne</option>
+                <option value="2">2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+              </select>
+              <p class="field-help" id="ev-places-aide">Au-delà de 4 personnes, appelez-nous.</p>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Vos coordonnées</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="ev-nom">Nom <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="ev-nom" name="nom" autocomplete="family-name" required aria-describedby="ev-nom-err">
+                <p class="field-error" id="ev-nom-err" hidden>Indiquez votre nom.</p>
+              </div>
+              <div class="field">
+                <label for="ev-prenom">Prénom <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="ev-prenom" name="prenom" autocomplete="given-name" required aria-describedby="ev-prenom-err">
+                <p class="field-error" id="ev-prenom-err" hidden>Indiquez votre prénom.</p>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="ev-tel">Téléphone <span class="req" aria-hidden="true">*</span></label>
+                <input type="tel" id="ev-tel" name="telephone" autocomplete="tel" inputmode="tel" required pattern="[0-9 +().\-]{10,20}" aria-describedby="ev-tel-aide ev-tel-err">
+                <p class="field-help" id="ev-tel-aide">Exemple&nbsp;: 06 12 34 56 78</p>
+                <p class="field-error" id="ev-tel-err" hidden>Indiquez un numéro de téléphone valide (10 chiffres).</p>
+              </div>
+              <div class="field">
+                <label for="ev-email">E-mail <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="ev-email" name="email" autocomplete="email" required aria-describedby="ev-email-aide ev-email-err">
+                <p class="field-help" id="ev-email-aide">Exemple&nbsp;: prenom.nom@exemple.fr</p>
+                <p class="field-error" id="ev-email-err" hidden>Indiquez une adresse e-mail valide.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="ev-message">Message (facultatif)</label>
+              <textarea id="ev-message" name="message" rows="3" aria-describedby="ev-message-aide"></textarea>
+              <p class="field-help" id="ev-message-aide">Une question, un besoin particulier (accès, place assise…).</p>
+            </div>
+          </fieldset>
+
+          <fieldset aria-describedby="ev-image-aide ev-image-err">
+            <legend>Droit à l'image <span class="req" aria-hidden="true">*</span></legend>
+            <p class="field-help" id="ev-image-aide">
+              Des photos peuvent être prises pendant l'évènement. Acceptez-vous d'apparaître sur celles publiées sur ce site&nbsp;?
+              Refuser ne change rien à votre inscription.
+            </p>
+            <label class="choice">
+              <input type="radio" name="droit_image" value="J'autorise" required>
+              <span>Oui, j'autorise l'association à publier des photos et vidéos où j'apparais.</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="droit_image" value="Je refuse">
+              <span>Non, je ne souhaite pas apparaître sur les photos et vidéos.</span>
+            </label>
+            <p class="field-error" id="ev-image-err" hidden>Merci de choisir une réponse concernant le droit à l'image.</p>
+          </fieldset>
+
+          <div class="field">
+            <label class="choice">
+              <input type="checkbox" id="ev-rgpd" name="consentement_rgpd" value="Oui" required aria-describedby="ev-rgpd-err">
+              <span>
+                J'accepte que mes données soient utilisées par l'association Les amis du bal à Papa
+                uniquement pour gérer cette inscription. <span class="req" aria-hidden="true">*</span>
+                <a href="mentions-legales.html#donnees-personnelles">En savoir plus</a>
+              </span>
+            </label>
+            <p class="field-error" id="ev-rgpd-err" hidden>Vous devez accepter l'utilisation de vos données pour envoyer le formulaire.</p>
+          </div>
+
+          <p class="center">
+            <button type="submit" class="btn btn-large" id="ev-submit">Envoyer mon inscription</button>
           </p>
         </form>
 

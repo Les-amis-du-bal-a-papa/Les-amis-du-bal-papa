@@ -4,6 +4,12 @@
 # Ce fichier décrit les formulaires proposés aux gestionnaires.
 # =========================================================
 
+media:
+  input: images/evenements
+  output: /images/evenements
+  rename: safe
+  extensions: [jpg, jpeg, png, webp]
+
 content:
 
   # ---------- AGENDA ----------
@@ -53,6 +59,12 @@ content:
       - name: details
         label: "Informations complémentaires (orchestre, tarif…) – facultatif"
         type: text
+      - name: image
+        label: "Image ou affiche (facultatif)"
+        type: image
+      - name: image_description
+        label: "Description de l'image en une phrase (lue aux personnes malvoyantes)"
+        type: string
 
   # ---------- INFOS PRATIQUES ----------
   - name: infos

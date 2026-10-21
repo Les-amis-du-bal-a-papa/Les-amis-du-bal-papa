@@ -6,14 +6,14 @@ Site statique hébergé sur GitHub Pages, avec un espace administrateur Pages CM
 
 | Élément | Rôle |
 |---|---|
-| `index.html` | Accueil (les trois vignettes) |
-| `bal-a-papa.html`, `stages-et-cours.html`, `evenements.html`, `agenda.html`, `adhesion.html` | Une page par onglet du menu |
+| `index.html` | Accueil : les trois vignettes, puis l'association, les salles et les infos pratiques |
+| `stages-et-cours.html`, `evenements.html`, `agenda.html`, `adhesion.html` | Une page par onglet du menu |
 | `mentions-legales.html` | Mentions légales et données personnelles |
 | `admin.html` | Page « Espace gestionnaires » (mode d'emploi + lien vers l'administration) |
 | `style.css` | Mise en forme |
 | `script.js` | Menu, agenda, formulaire, chargement des contenus |
 | `data/` | Contenus modifiables depuis l'administration (agenda, annonce, tarifs, salles, danses) |
-| `images/` | Les trois images rondes de l'accueil |
+| `images/` | Les trois images rondes de l’accueil ; `images/evenements/` reçoit les affiches et photos ajoutées depuis l’administration |
 | `.pages.yml` | Réglages de l'espace administrateur (fichier caché : ne pas supprimer) |
 
 ## Mise en ligne (une seule fois)

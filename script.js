@@ -2,8 +2,8 @@
    Les amis du bal à Papa – Script du site
    1. Menu mobile et sous-menus déroulants
    2. Contenus gérés depuis l'espace gestionnaires (dossier data/)
-   3. Agenda trimestriel + « Le prochain bal »
-   4. Formulaire de pré-inscription (Formspree)
+   3. Agenda trimestriel + « Le prochain bal » + liste des évènements à réserver
+   4. Formulaires (Formspree) : adhésion à l'année et inscription à un évènement
    ========================================================= */
 
 /* Contenus de secours : utilisés si le dossier data/ ne peut pas être lu
@@ -16,7 +16,9 @@ const AGENDA_SECOURS = [
     type: "the",
     heure: "15 h – 18 h (billetterie dès 14 h 20)",
     lieu: "Le Cœur de Mérande, Chambéry",
-    details: "Entrée 10 €. Buvette dès 14 h 20, vente de pâtisseries à partir de 16 h."
+    details: "Entrée 10 €. Buvette dès 14 h 20, vente de pâtisseries à partir de 16 h.",
+    image: "/images/evenements/2026-10-25-duo-guilloux.jpg",
+    image_description: "Affiche du bal du dimanche 25 octobre avec le duo Jacky et Sandrine Guilloux, accordéon et chant, à la salle Mérande à Chambéry"
   }
 ];
 
@@ -32,7 +34,7 @@ const WEEKDAYS_LONG = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samed
 
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
-  initForm();
+  initForms();
   loadContent();
   const annee = document.getElementById("annee");
   if (annee) annee.textContent = new Date().getFullYear();
@@ -167,6 +169,9 @@ function initAgenda(data) {
   // Page « Les évènements » : le prochain bal
   renderNextBal(events.find(e => e.d >= today));
 
+  // Page « Adhésion » : la liste des évènements auxquels on peut s'inscrire
+  fillEventSelect(events.filter(e => e.d >= today && isBookable(e)));
+
   // Page « Agenda » : le calendrier trimestriel
   const calendarEl = document.getElementById("calendar");
   if (!calendarEl) return;
@@ -253,7 +258,7 @@ function initAgenda(data) {
 
   function buildEvent(e) {
     const li = document.createElement("li");
-    li.className = "event";
+    li.className = "event" + (e.image ? " has-image" : "");
     li.id = e.id;
     li.tabIndex = -1;
     li.innerHTML = `
@@ -265,7 +270,9 @@ function initAgenda(data) {
         ${e.heure ? `<p>${escapeHtml(e.heure)}</p>` : ""}
         ${e.lieu ? `<p>${escapeHtml(e.lieu)}</p>` : ""}
         ${e.details ? `<p>${escapeHtml(e.details)}</p>` : ""}
-      </div>`;
+        ${e.d >= today && isBookable(e) ? signupLink(e) : ""}
+      </div>
+      ${eventImage(e, "event-image")}`;
     return li;
   }
 
@@ -295,35 +302,107 @@ function renderNextBal(e) {
   const box = document.getElementById("prochain-bal-contenu");
   if (!box || !e) return;
   box.innerHTML = `
-    <div class="next-event">
+    <div class="next-event${e.image ? " has-image" : ""}">
+      ${eventImage(e, "next-image")}
+      <div>
       <p class="next-date">${capitalize(longDate(e.d))}</p>
       <h4>${escapeHtml(e.titre)}</h4>
       ${e.heure ? `<p>${escapeHtml(e.heure)}</p>` : ""}
       ${e.lieu ? `<p>${escapeHtml(e.lieu)}</p>` : ""}
       ${e.details ? `<p>${escapeHtml(e.details)}</p>` : ""}
+      ${isBookable(e) ? signupLink(e) : ""}
+      </div>
     </div>`;
 }
 
-/* ---------- 4. Formulaire de pré-inscription ---------- */
-function initForm() {
-  const form = document.getElementById("form-inscription");
+/* ---------- Image d'un évènement (affiche, photo) ---------- */
+// Chemin : enlève le « / » initial ajouté par l'espace gestionnaires,
+// pour que l'image fonctionne aussi quand le site est dans un sous-dossier.
+function assetPath(p) { return String(p || "").trim().replace(/^\/+/, ""); }
+
+function eventImage(e, cls) {
+  const src = assetPath(e.image);
+  if (!src) return "";
+  const alt = e.image_description || `Image de l'évènement : ${e.titre}`;
+  // Un clic ouvre l'image en grand, dans un nouvel onglet
+  return `<a class="${cls}" href="${escapeHtml(src)}" target="_blank" rel="noopener">
+      <img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">
+      <span class="image-zoom">Agrandir l'image<span class="visually-hidden"> (s'ouvre dans un nouvel onglet)</span></span>
+    </a>`;
+}
+
+/* ---------- Inscription à un seul évènement ---------- */
+// On s'inscrit à un bal ou à un stage, pas à une réunion.
+function isBookable(e) { return e.type === "the" || e.type === "stage"; }
+
+function eventLabel(e) { return `${capitalize(longDate(e.d))} – ${e.titre}`; }
+
+function signupLink(e) {
+  return `<p class="event-signup"><a class="btn" href="adhesion.html?evenement=${encodeURIComponent(e.date)}#inscription-evenement">S'inscrire à cet évènement<span class="visually-hidden"> : ${escapeHtml(eventLabel(e))}</span></a></p>`;
+}
+
+function fillEventSelect(list) {
+  const select = document.getElementById("ev-choix");
+  if (!select) return;
+  if (!list.length) {
+    select.innerHTML = `<option value="">Aucun évènement à venir pour le moment – appelez-nous au 07 69 11 41 50</option>`;
+    return;
+  }
+  select.innerHTML = `<option value="">— Choisissez un évènement —</option>` +
+    list.map(e => `<option value="${escapeHtml(eventLabel(e))}" data-date="${escapeHtml(e.date)}">${escapeHtml(eventLabel(e))}</option>`).join("");
+
+  // Arrivée depuis un bouton « S'inscrire à cet évènement » : l'évènement est déjà choisi
+  const wanted = new URLSearchParams(window.location.search).get("evenement");
+  if (wanted) {
+    const opt = [...select.options].find(o => o.dataset.date === wanted);
+    if (opt) select.value = opt.value;
+  }
+}
+
+/* ---------- 4. Formulaires ---------- */
+function initForms() {
+  setupForm({
+    formId: "form-inscription", summaryId: "form-summary", successId: "form-success", submitId: "form-submit",
+    successText: "Merci ! Votre pré-inscription a bien été envoyée. Nous vous recontacterons très vite.",
+    checks: [
+      ["#nom", "nom-err", "Nom"],
+      ["#prenom", "prenom-err", "Prénom"],
+      ["#naissance", "naissance-err", "Date de naissance"],
+      ["#tel", "tel-err", "Téléphone"],
+      ["#email", "email-err", "E-mail"],
+      ["#urgence-nom", "urgence-nom-err", "Contact d'urgence : nom"],
+      ["#urgence-tel", "urgence-tel-err", "Contact d'urgence : téléphone"],
+      ["droit_image", "image-err", "Droit à l'image", "group"],
+      ["#rgpd", "rgpd-err", "Consentement à l'utilisation des données"]
+    ]
+  });
+
+  setupForm({
+    formId: "form-evenement", summaryId: "ev-summary", successId: "ev-success", submitId: "ev-submit",
+    successText: "Merci ! Votre inscription a bien été envoyée. Nous vous attendons sur la piste ; l'entrée se règle sur place.",
+    checks: [
+      ["#ev-choix", "ev-choix-err", "Évènement choisi"],
+      ["#ev-nom", "ev-nom-err", "Nom"],
+      ["#ev-prenom", "ev-prenom-err", "Prénom"],
+      ["#ev-tel", "ev-tel-err", "Téléphone"],
+      ["#ev-email", "ev-email-err", "E-mail"],
+      ["droit_image", "ev-image-err", "Droit à l'image", "group"],
+      ["#ev-rgpd", "ev-rgpd-err", "Consentement à l'utilisation des données"]
+    ]
+  });
+}
+
+function setupForm(cfg) {
+  const form = document.getElementById(cfg.formId);
   if (!form) return;
-  const summary = document.getElementById("form-summary");
-  const success = document.getElementById("form-success");
-  const submitBtn = document.getElementById("form-submit");
+  const summary = document.getElementById(cfg.summaryId);
+  const success = document.getElementById(cfg.successId);
+  const submitBtn = document.getElementById(cfg.submitId);
   const submitLabel = submitBtn.textContent;
 
-  const checks = [
-    { el: form.querySelector("#nom"), err: "nom-err", label: "Nom" },
-    { el: form.querySelector("#prenom"), err: "prenom-err", label: "Prénom" },
-    { el: form.querySelector("#naissance"), err: "naissance-err", label: "Date de naissance" },
-    { el: form.querySelector("#tel"), err: "tel-err", label: "Téléphone" },
-    { el: form.querySelector("#email"), err: "email-err", label: "E-mail" },
-    { el: form.querySelector("#urgence-nom"), err: "urgence-nom-err", label: "Contact d'urgence : nom" },
-    { el: form.querySelector("#urgence-tel"), err: "urgence-tel-err", label: "Contact d'urgence : téléphone" },
-    { group: "droit_image", err: "image-err", label: "Droit à l'image", focus: form.querySelector('input[name="droit_image"]') },
-    { el: form.querySelector("#rgpd"), err: "rgpd-err", label: "Consentement à l'utilisation des données" }
-  ];
+  const checks = cfg.checks.map(([sel, err, label, kind]) => kind === "group"
+    ? { group: sel, err, label, focus: form.querySelector(`input[name="${sel}"]`) }
+    : { el: form.querySelector(sel), err, label });
 
   const isValid = c => {
     if (c.group) return !!form.querySelector(`input[name="${c.group}"]:checked`);
@@ -384,7 +463,7 @@ function initForm() {
       if (!res.ok) throw new Error("Erreur d'envoi");
       form.reset();
       checks.forEach(c => showError(c, false));
-      success.textContent = "Merci ! Votre pré-inscription a bien été envoyée. Nous vous recontacterons très vite.";
+      success.textContent = cfg.successText;
       success.hidden = false;
       success.focus();
     } catch (err) {

@@ -264,12 +264,15 @@ main:focus { outline: none; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
 .field > label { display: block; font-weight: 600; color: var(--black); margin-bottom: 0.35rem; }
 
-.form input[type="text"], .form input[type="email"], .form input[type="tel"], .form input[type="date"] {
+.form input[type="text"], .form input[type="email"], .form input[type="tel"], .form input[type="date"],
+.form select, .form textarea {
   width: 100%; min-height: 54px; padding: 0.7rem 0.9rem;
   font: inherit; color: var(--black); background: var(--white);
   border: 1px solid var(--line-strong); border-radius: var(--radius);
 }
-.form input:focus { border-color: var(--focus); }
+.form input:focus, .form select:focus, .form textarea:focus { border-color: var(--focus); }
+.form textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+.form select[aria-invalid="true"] { border: 2px solid var(--error); }
 .form input[aria-invalid="true"] { border: 2px solid var(--error); }
 
 .field-help { color: var(--grey); font-size: 0.95rem; margin: 0.3rem 0 0; }
@@ -287,6 +290,25 @@ main:focus { outline: none; }
 .form-success { border: 2px solid var(--btn); color: var(--black); font-weight: 700; }
 
 .contact { margin-top: 3rem; }
+
+/* Adhésion : les deux façons de s'inscrire */
+.choices { list-style: none; padding: 0; margin: 2rem 0 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.choice-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.75rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.choice-card h2 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.6rem; margin: 0; }
+.choice-price { color: var(--black); font-weight: 700; font-size: 1.2rem; margin: 0.4rem 0 0.6rem; }
+.choice-card p:not(.choice-price) { color: var(--grey); flex: 1; }
+.form-title { text-align: center; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.7rem, 1.4rem + 1vw, 2.2rem); margin-top: 4rem; scroll-margin-top: 1rem; }
+
+/* Image d'un évènement (affiche ou photo) */
+.event.has-image { grid-template-columns: 140px 1fr 180px; }
+.event-image, .next-image { display: block; text-decoration: none; color: var(--btn); }
+.event-image img, .next-image img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.image-zoom { display: block; font-size: 0.95rem; margin-top: 0.4rem; text-decoration: underline; text-underline-offset: 0.18em; }
+.next-event.has-image { display: grid; grid-template-columns: 220px 1fr; gap: 1.75rem; align-items: start; }
+
+/* Bouton « S'inscrire à cet évènement » (agenda, prochain bal) */
+.event-signup { margin-top: 0.8rem !important; }
+.event-signup .btn { font-size: 0.95rem; padding: 0.7rem 1.3rem; }
 .contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; }
 .contact-links .btn { text-transform: none; letter-spacing: 0; font-size: 1.1rem; }
 
@@ -341,6 +363,7 @@ main:focus { outline: none; }
   .two-cols { grid-template-columns: 1fr; gap: 0; }
   .calendar { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
+  .choices { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {
@@ -351,7 +374,8 @@ main:focus { outline: none; }
   .card-img { width: 190px; height: 190px; }
   .agenda-controls .btn { width: 100%; }
   .agenda-period { order: -1; flex-basis: 100%; }
-  .event, .news li { grid-template-columns: 1fr; gap: 0.4rem; }
+  .event, .event.has-image, .news li, .next-event.has-image { grid-template-columns: 1fr; gap: 0.6rem; }
+  .event-image, .next-image { max-width: 260px; }
   .footer-grid { grid-template-columns: 1fr; }
   .form fieldset { padding: 1rem 1rem 0.25rem; }
   .contact-links .btn { width: 100%; }

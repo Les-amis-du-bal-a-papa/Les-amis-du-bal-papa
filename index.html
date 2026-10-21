@@ -30,14 +30,6 @@
     <nav class="main-nav" id="main-nav" aria-label="Menu principal">
       <ul class="container nav-list" id="menu-principal">
         <li class="nav-item">
-          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-bal">Bal à papa</button>
-          <ul class="sub-menu" id="sub-bal">
-            <li><a href="bal-a-papa.html">L'association</a></li>
-            <li><a href="bal-a-papa.html#salles">Nos salles</a></li>
-            <li><a href="bal-a-papa.html#infos-pratiques">Infos pratiques</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
           <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-stages">Stages et cours</button>
           <ul class="sub-menu" id="sub-stages">
             <li><a href="stages-et-cours.html">Stages et cours</a></li>
@@ -110,6 +102,48 @@
             <a class="btn" href="evenements.html">Lire la suite <span class="visually-hidden">: les grands évènements</span></a>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <section id="association" class="section" aria-labelledby="titre-association">
+      <div class="container container-narrow">
+        <h2 class="section-title" id="titre-association">Le bal à Papa</h2>
+        <span class="separator separator-center" aria-hidden="true"></span>
+        <p class="lead">
+          Les amis du bal à Papa est une association loi 1901 qui a pour objectif de
+          maintenir et promouvoir les danses de bal qui font partie de la culture française.
+        </p>
+        <p>
+          Tout au long de l'année, nous organisons à Chambéry des après-midis dansants ouverts à tous&nbsp;:
+          danses à deux et danse en ligne, dans une ambiance conviviale.
+          Un agenda trimestriel est distribué à chaque bal.
+        </p>
+
+        <div class="two-cols">
+          <div id="salles">
+            <h3>Nos salles à Chambéry</h3>
+            <!-- Contenu géré depuis l'espace gestionnaires (data/infos.json) -->
+            <ul class="plain-list" id="salles-liste">
+              <li>Le Cœur de Mérande</li>
+              <li>Le Scarabée</li>
+              <li>La Bisseraine</li>
+            </ul>
+            <p class="note">La salle de chaque bal est indiquée dans l'agenda.
+              Pour l'adresse exacte, contactez-nous.</p>
+          </div>
+
+          <div id="infos-pratiques">
+            <h3>Infos pratiques</h3>
+            <!-- Contenu géré depuis l'espace gestionnaires (data/infos.json) -->
+            <dl class="infos" id="infos-liste">
+              <div><dt>Horaires</dt><dd>15&nbsp;h – 18&nbsp;h</dd></div>
+              <div><dt>Billetterie</dt><dd>Ouverture à 14&nbsp;h&nbsp;20</dd></div>
+              <div><dt>Entrée</dt><dd>10&nbsp;€</dd></div>
+              <div><dt>Adhérents</dt><dd>45&nbsp;€ pour l'année</dd></div>
+              <div><dt>Buvette</dt><dd>Dès 14&nbsp;h&nbsp;20 – pâtisseries à partir de 16&nbsp;h</dd></div>
+            </dl>
+          </div>
+        </div>
       </div>
     </section>
 
