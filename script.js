@@ -1,19 +1,29 @@
 /* =========================================================
-   Les Amis du Bal à Papa – Script du site
-   1. Menu mobile        2. Taille du texte
-   3. Contenus gérés depuis l'espace administrateur (dossier data/)
-      – annonce, cours, salles, galerie, agenda
-   4. Formulaire         5. Lien actif dans le menu
-   ---------------------------------------------------------
-   Les contenus ne se modifient PAS ici : ils se modifient dans
-   l'espace administrateur (Pages CMS), qui met à jour les fichiers
-   du dossier data/.
+   Les amis du bal à Papa – Script du site
+   1. Menu mobile et sous-menus déroulants
+   2. Contenus gérés depuis l'espace gestionnaires (dossier data/)
+   3. Agenda trimestriel + « Le prochain bal »
+   4. Formulaire de pré-inscription (Formspree)
    ========================================================= */
 
+/* Contenus de secours : utilisés si le dossier data/ ne peut pas être lu
+   (par exemple quand on ouvre index.html directement depuis son ordinateur).
+   En ligne, ce sont les fichiers data/agenda.json et data/infos.json qui comptent. */
+const AGENDA_SECOURS = [
+  {
+    date: "2026-10-25",
+    titre: "Bal avec le duo Jacky et Sandrine Guilloux",
+    type: "the",
+    heure: "15 h – 18 h (billetterie dès 14 h 20)",
+    lieu: "Le Cœur de Mérande, Chambéry",
+    details: "Entrée 10 €. Buvette dès 14 h 20, vente de pâtisseries à partir de 16 h."
+  }
+];
+
 const TYPES = {
-  stage: { label: "Stage de danse", icon: "★" },
-  the: { label: "Bal / thé dansant", icon: "♫" },
-  ag: { label: "Assemblée générale / réunion", icon: "■" }
+  the: "Bal",
+  stage: "Stage de danse",
+  ag: "Assemblée générale / réunion"
 };
 
 const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
@@ -22,94 +32,93 @@ const WEEKDAYS_LONG = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samed
 
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
-  initTextSize();
   initForm();
-  initActiveNav();
   loadContent();
   const annee = document.getElementById("annee");
   if (annee) annee.textContent = new Date().getFullYear();
 });
 
-/* ---------- 1. Menu mobile ---------- */
+/* ---------- 1. Menu mobile et sous-menus ---------- */
 function initMenu() {
   const toggle = document.querySelector(".menu-toggle");
-  const nav = document.querySelector(".main-nav");
-  if (!toggle || !nav) return;
+  const nav = document.getElementById("main-nav");
+  if (!nav) return;
+  const subButtons = nav.querySelectorAll(".has-sub");
 
-  const close = () => {
+  const closeSubs = except => subButtons.forEach(b => {
+    if (b !== except) b.setAttribute("aria-expanded", "false");
+  });
+
+  const closeMenu = () => {
+    if (!toggle) return;
     toggle.setAttribute("aria-expanded", "false");
     nav.classList.remove("is-open");
   };
 
-  toggle.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    nav.classList.toggle("is-open", !open);
+  // Bouton « Menu » (téléphone)
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!open));
+      nav.classList.toggle("is-open", !open);
+      if (open) closeSubs();
+    });
+  }
+
+  // Sous-menus déroulants : ouverture au clic (souris, doigt ou clavier)
+  subButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") === "true";
+      closeSubs(btn);
+      btn.setAttribute("aria-expanded", String(!open));
+    });
   });
 
-  nav.querySelectorAll("a").forEach(a => a.addEventListener("click", close));
-
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      close();
-      toggle.focus();
-    }
-  });
-}
-
-/* ---------- 2. Taille du texte ---------- */
-function initTextSize() {
-  const buttons = document.querySelectorAll(".btn-size");
-  const apply = size => {
-    document.documentElement.setAttribute("data-text-size", size);
-    buttons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.size === size)));
-  };
-
-  let saved = "normal";
-  try { saved = localStorage.getItem("taille-texte") || "normal"; } catch (e) { /* stockage indisponible */ }
-  apply(saved);
-
-  buttons.forEach(b => b.addEventListener("click", () => {
-    apply(b.dataset.size);
-    try { localStorage.setItem("taille-texte", b.dataset.size); } catch (e) { /* ignoré */ }
+  // Un lien choisi referme les menus
+  nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    closeSubs();
+    closeMenu();
   }));
+
+  // Clic en dehors : on referme les sous-menus
+  document.addEventListener("click", e => {
+    if (!nav.contains(e.target) && e.target !== toggle && !(toggle && toggle.contains(e.target))) closeSubs();
+  });
+
+  // Touche Échap : on referme et on rend la main au bon bouton
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    const openSub = nav.querySelector('.has-sub[aria-expanded="true"]');
+    if (openSub) { closeSubs(); openSub.focus(); return; }
+    if (toggle && toggle.getAttribute("aria-expanded") === "true") { closeMenu(); toggle.focus(); }
+  });
 }
 
-/* ---------- 3. Contenus du dossier data/ ---------- */
+/* ---------- 2. Contenus du dossier data/ ---------- */
 async function getJSON(path) {
-  // "no-cache" : les modifications faites dans l'espace administrateur
-  // apparaissent dès que GitHub Pages a republié le site.
   const res = await fetch(path, { cache: "no-cache" });
   if (!res.ok) throw new Error(path + " : " + res.status);
   return res.json();
 }
 
 async function loadContent() {
-  const [infos, cours, galerie, agenda] = await Promise.allSettled([
+  const [infos, agenda] = await Promise.allSettled([
     getJSON("data/infos.json"),
-    getJSON("data/cours.json"),
-    getJSON("data/galerie.json"),
     getJSON("data/agenda.json")
   ]);
 
-  // En cas d'échec, le contenu déjà présent dans index.html reste affiché.
-  if (infos.status === "fulfilled") {
-    const i = infos.value || {};
+  // Si un fichier ne peut pas être lu, le texte déjà présent dans la page reste affiché.
+  if (infos.status === "fulfilled" && infos.value) {
+    const i = infos.value;
     renderAnnonce(i.annonce);
-    renderStyles(i.styles);
-    renderPratique(i.pratique);
-    renderSalles(i.salles);
+    renderList("salles-liste", (i.salles || []).map(s => s && s.nom));
+    renderList("danses-liste", i.styles);
+    renderInfos(i.pratique);
   }
-  if (cours.status === "fulfilled") renderCours(cours.value);
-  if (galerie.status === "fulfilled") renderGalerie(galerie.value);
-  else initGalleryFallback();
 
-  initAgenda(agenda.status === "fulfilled" ? agenda.value : null);
+  const events = agenda.status === "fulfilled" && Array.isArray(agenda.value) ? agenda.value : AGENDA_SECOURS;
+  initAgenda(events);
 }
-
-// Chemin d'image : enlève le "/" initial ajouté par l'espace administrateur,
-// pour que les images fonctionnent aussi quand le site est dans un sous-dossier.
-function assetPath(p) { return String(p || "").trim().replace(/^\/+/, ""); }
 
 function renderAnnonce(a) {
   const box = document.getElementById("annonce");
@@ -118,80 +127,24 @@ function renderAnnonce(a) {
   box.hidden = false;
 }
 
-function renderCours(list) {
-  const box = document.getElementById("cours-cards");
-  if (!box || !Array.isArray(list) || !list.length) return;
-  box.innerHTML = list.map(c => `
-    <article class="card">
-      ${c.icone ? `<div class="card-icon" aria-hidden="true">${escapeHtml(c.icone)}</div>` : ""}
-      <h3>${escapeHtml(c.titre)}</h3>
-      ${c.description ? `<p>${escapeHtml(c.description)}</p>` : ""}
-      <dl class="card-details">
-        ${c.niveaux ? `<div><dt>Pour qui</dt><dd>${escapeHtml(c.niveaux)}</dd></div>` : ""}
-        ${c.rythme ? `<div><dt>Fréquence</dt><dd>${escapeHtml(c.rythme)}</dd></div>` : ""}
-        ${c.quand ? `<div><dt>Horaires</dt><dd>${escapeHtml(c.quand)}</dd></div>` : ""}
-      </dl>
-    </article>`).join("");
+function renderList(id, items) {
+  const box = document.getElementById(id);
+  const clean = (items || []).filter(x => String(x || "").trim());
+  if (!box || !clean.length) return;
+  box.innerHTML = clean.map(x => `<li>${escapeHtml(x)}</li>`).join("");
 }
 
-function renderStyles(list) {
-  const box = document.getElementById("styles");
-  if (!box || !Array.isArray(list) || !list.length) return;
-  box.innerHTML = list.filter(s => String(s || "").trim()).map(s => `<li>${escapeHtml(s)}</li>`).join("");
-}
-
-function renderPratique(p) {
-  const box = document.getElementById("pratique");
+function renderInfos(p) {
+  const box = document.getElementById("infos-liste");
   if (!box || !p) return;
   const lignes = [
     ["Horaires", p.horaires], ["Billetterie", p.billetterie],
     ["Entrée", p.entree], ["Adhérents", p.adhesion], ["Buvette", p.buvette]
-  ].filter(([, v]) => v && String(v).trim());
-  if (!lignes.length) return;
-  box.innerHTML = lignes.map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHtml(v)}</dd></div>`).join("");
+  ].filter(([, v]) => String(v || "").trim());
+  if (lignes.length) box.innerHTML = lignes.map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHtml(v)}</dd></div>`).join("");
 }
 
-// Volontairement sans adresse précise : seul le nom de la salle est publié.
-function renderSalles(list) {
-  const box = document.getElementById("salles");
-  if (!box || !Array.isArray(list) || !list.length) return;
-  box.innerHTML = list
-    .filter(s => s && String(s.nom || "").trim())
-    .map(s => `<li><strong>${escapeHtml(s.nom)}</strong>${s.infos ? `<br><span>${escapeHtml(s.infos)}</span>` : ""}</li>`)
-    .join("");
-}
-
-function renderGalerie(list) {
-  const box = document.getElementById("gallery");
-  if (!box || !Array.isArray(list)) return;
-  box.innerHTML = list.map(g => {
-    const src = assetPath(g.image);
-    const alt = escapeHtml(g.description || g.legende || "");
-    const visuel = src
-      ? `<img src="${escapeHtml(src)}" alt="${alt}" loading="lazy" width="600" height="450">`
-      : `<div class="gallery-placeholder" role="img" aria-label="${alt}">Photo à venir</div>`;
-    return `<li><figure>${visuel}${g.legende ? `<figcaption>${escapeHtml(g.legende)}</figcaption>` : ""}</figure></li>`;
-  }).join("");
-  initGalleryFallback();
-}
-
-// Remplace une photo introuvable par une vignette « Photo à venir »
-function initGalleryFallback() {
-  document.querySelectorAll(".gallery img").forEach(img => {
-    const swap = () => {
-      const ph = document.createElement("div");
-      ph.className = "gallery-placeholder";
-      ph.setAttribute("role", "img");
-      ph.setAttribute("aria-label", img.alt);
-      ph.textContent = "Photo à venir";
-      img.replaceWith(ph);
-    };
-    if (img.complete && img.naturalWidth === 0) swap();
-    else img.addEventListener("error", swap);
-  });
-}
-
-/* ---------- Agenda trimestriel ---------- */
+/* ---------- 3. Agenda trimestriel ---------- */
 function parseDate(str) {
   const [y, m, d] = String(str).slice(0, 10).split("-").map(Number);
   return new Date(y, m - 1, d);
@@ -199,107 +152,93 @@ function parseDate(str) {
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
-function formatLongDate(d) {
-  return `${WEEKDAYS_LONG[(d.getDay() + 6) % 7]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
+function weekday(d) { return WEEKDAYS_LONG[(d.getDay() + 6) % 7]; }
+function longDate(d) { return `${weekday(d)} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; }
 
 function initAgenda(data) {
   const calendarEl = document.getElementById("calendar");
   if (!calendarEl) return;
-
   const listEl = document.getElementById("event-list");
   const emptyEl = document.getElementById("event-empty");
   const periodEl = document.getElementById("agenda-period");
-  const filters = document.querySelectorAll(".agenda-filters input");
 
-  if (data === null) {
-    emptyEl.textContent = "L'agenda n'a pas pu être chargé. Pour connaître les prochaines dates, appelez le 07 69 11 41 50 ou écrivez à lesamisdubal@gmail.com.";
-  }
-
-  const events = (Array.isArray(data) ? data : [])
-    .filter(e => e && e.date && TYPES[e.type] && !isNaN(parseDate(e.date)))
+  const events = data
+    .filter(e => e && e.date && !isNaN(parseDate(e.date)))
     .map((e, i) => ({ ...e, id: "evt-" + i, d: parseDate(e.date) }))
     .sort((a, b) => a.d - b.d);
 
-  // Trimestre de départ : celui d'aujourd'hui, sauf si l'agenda commence plus tard
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  renderNextBal(events.find(e => e.d >= today));
+
+  // Trimestre affiché au départ : celui d'aujourd'hui (ou du premier évènement s'il est plus tard)
   let start = today;
   if (events.length && events[0].d > today) start = events[0].d;
   let year = start.getFullYear();
-  let quarter = Math.floor(start.getMonth() / 3); // 0 à 3
-
-  const activeTypes = () => Array.from(filters).filter(f => f.checked).map(f => f.value);
+  let quarter = Math.floor(start.getMonth() / 3);
 
   function render() {
-    const types = activeTypes();
-    const firstMonth = quarter * 3;
-    const qStart = new Date(year, firstMonth, 1);
-    const qEnd = new Date(year, firstMonth + 3, 1);
-    const visible = events.filter(e => e.d >= qStart && e.d < qEnd && types.includes(e.type));
+    const first = quarter * 3;
+    const qStart = new Date(year, first, 1);
+    const qEnd = new Date(year, first + 3, 1);
+    const visible = events.filter(e => e.d >= qStart && e.d < qEnd);
 
-    periodEl.textContent = `${capitalize(MONTHS[firstMonth])} – ${MONTHS[firstMonth + 2]} ${year}`;
-
+    periodEl.textContent = `${capitalize(MONTHS[first])} – ${MONTHS[first + 2]} ${year}`;
     calendarEl.innerHTML = "";
-    for (let m = firstMonth; m < firstMonth + 3; m++) {
-      calendarEl.appendChild(buildMonth(year, m, visible, today));
-    }
+    for (let m = first; m < first + 3; m++) calendarEl.appendChild(buildMonth(year, m, visible));
 
     listEl.innerHTML = "";
     visible.forEach(e => listEl.appendChild(buildEvent(e)));
     emptyEl.hidden = visible.length > 0;
   }
 
-  function buildMonth(y, m, visible, today) {
+  function buildMonth(y, m, visible) {
     const table = document.createElement("table");
     table.className = "month";
-
     const caption = document.createElement("caption");
     caption.textContent = `${MONTHS[m]} ${y}`;
     table.appendChild(caption);
 
-    const thead = document.createElement("thead");
-    const hr = document.createElement("tr");
+    const head = document.createElement("tr");
     WEEKDAYS_SHORT.forEach((s, i) => {
       const th = document.createElement("th");
       th.scope = "col";
       th.innerHTML = `<abbr title="${WEEKDAYS_LONG[i]}">${s}</abbr>`;
-      hr.appendChild(th);
+      head.appendChild(th);
     });
-    thead.appendChild(hr);
+    const thead = document.createElement("thead");
+    thead.appendChild(head);
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
-    const first = new Date(y, m, 1);
-    const offset = (first.getDay() + 6) % 7; // lundi = 0
-    const daysInMonth = new Date(y, m + 1, 0).getDate();
-
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+    const days = new Date(y, m + 1, 0).getDate();
     let row = document.createElement("tr");
     for (let i = 0; i < offset; i++) row.appendChild(document.createElement("td"));
 
-    for (let day = 1; day <= daysInMonth; day++) {
+    for (let day = 1; day <= days; day++) {
       const date = new Date(y, m, day);
       const td = document.createElement("td");
       if (sameDay(date, today)) td.classList.add("is-today");
-
       const dayEvents = visible.filter(e => sameDay(e.d, date));
+
       if (dayEvents.length) {
         const btn = document.createElement("button");
         btn.type = "button";
-        const cls = new Set(dayEvents.map(e => e.type)).size > 1 ? "type-multi" : "type-" + dayEvents[0].type;
-        btn.className = "day-btn " + cls;
-        btn.innerHTML = `<span>${day}</span><span class="day-marks" aria-hidden="true">${dayEvents.map(e => TYPES[e.type].icon).join("")}</span>`;
-        btn.setAttribute("aria-label", `${formatLongDate(date)} : ${dayEvents.map(e => e.titre).join(", ")}. Voir le détail.`);
+        btn.className = "day-btn";
+        btn.textContent = day;
+        btn.setAttribute("aria-label", `${longDate(date)} : ${dayEvents.map(e => e.titre).join(", ")}. Voir le détail.`);
         btn.addEventListener("click", () => focusEvent(dayEvents[0].id));
         td.appendChild(btn);
       } else {
         td.innerHTML = `<span class="day-num">${day}</span>`;
       }
-
       row.appendChild(td);
-      if ((offset + day) % 7 === 0 || day === daysInMonth) {
-        if (day === daysInMonth) {
-          const remaining = (7 - ((offset + day) % 7)) % 7;
-          for (let i = 0; i < remaining; i++) row.appendChild(document.createElement("td"));
+
+      if ((offset + day) % 7 === 0 || day === days) {
+        if (day === days) {
+          const rest = (7 - ((offset + day) % 7)) % 7;
+          for (let i = 0; i < rest; i++) row.appendChild(document.createElement("td"));
         }
         tbody.appendChild(row);
         row = document.createElement("tr");
@@ -311,22 +250,17 @@ function initAgenda(data) {
 
   function buildEvent(e) {
     const li = document.createElement("li");
-    li.className = "event type-" + e.type;
+    li.className = "event";
     li.id = e.id;
     li.tabIndex = -1;
-    const t = TYPES[e.type];
     li.innerHTML = `
-      <div class="event-date" aria-hidden="true">
-        <span class="d-weekday">${WEEKDAYS_LONG[(e.d.getDay() + 6) % 7]}</span>
-        <span class="d-day">${e.d.getDate()}</span>
-        <span class="d-month">${MONTHS[e.d.getMonth()]}</span>
-      </div>
+      <div class="event-date" aria-hidden="true">${capitalize(weekday(e.d))}<b>${e.d.getDate()}</b>${MONTHS[e.d.getMonth()]}</div>
       <div>
-        <span class="event-badge"><span aria-hidden="true">${t.icon}</span> ${t.label}</span>
+        <span class="event-type">${escapeHtml(TYPES[e.type] || "Évènement")}</span>
         <h4>${escapeHtml(e.titre)}</h4>
-        <p><strong>Date :</strong> ${formatLongDate(e.d)}</p>
-        ${e.heure ? `<p><strong>Horaires :</strong> ${escapeHtml(e.heure)}</p>` : ""}
-        ${e.lieu ? `<p><strong>Lieu :</strong> ${escapeHtml(e.lieu)}</p>` : ""}
+        <p><span class="visually-hidden">Date : </span>${capitalize(longDate(e.d))}</p>
+        ${e.heure ? `<p>${escapeHtml(e.heure)}</p>` : ""}
+        ${e.lieu ? `<p>${escapeHtml(e.lieu)}</p>` : ""}
         ${e.details ? `<p>${escapeHtml(e.details)}</p>` : ""}
       </div>`;
     return li;
@@ -337,7 +271,8 @@ function initAgenda(data) {
     if (!el) return;
     document.querySelectorAll(".event.is-highlighted").forEach(x => x.classList.remove("is-highlighted"));
     el.classList.add("is-highlighted");
-    el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
     el.focus({ preventScroll: true });
   }
 
@@ -349,9 +284,21 @@ function initAgenda(data) {
     quarter++; if (quarter > 3) { quarter = 0; year++; }
     render();
   });
-  filters.forEach(f => f.addEventListener("change", render));
 
   render();
+}
+
+function renderNextBal(e) {
+  const box = document.getElementById("prochain-bal-contenu");
+  if (!box || !e) return;
+  box.innerHTML = `
+    <div class="next-event">
+      <p class="next-date">${capitalize(longDate(e.d))}</p>
+      <h4>${escapeHtml(e.titre)}</h4>
+      ${e.heure ? `<p>${escapeHtml(e.heure)}</p>` : ""}
+      ${e.lieu ? `<p>${escapeHtml(e.lieu)}</p>` : ""}
+      ${e.details ? `<p>${escapeHtml(e.details)}</p>` : ""}
+    </div>`;
 }
 
 /* ---------- 4. Formulaire de pré-inscription ---------- */
@@ -361,35 +308,44 @@ function initForm() {
   const summary = document.getElementById("form-summary");
   const success = document.getElementById("form-success");
   const submitBtn = document.getElementById("form-submit");
+  const submitLabel = submitBtn.textContent;
 
   const checks = [
-    { el: form.nom, err: "nom-err", label: "Nom et prénom" },
-    { el: form.naissance, err: "naissance-err", label: "Date de naissance" },
-    { el: form.tel, err: "tel-err", label: "Téléphone" },
-    { el: form.email, err: "email-err", label: "Adresse e-mail" },
-    { el: form["urgence-nom"], err: "urgence-nom-err", label: "Personne à contacter en cas d'urgence (nom)" },
-    { el: form["urgence-tel"], err: "urgence-tel-err", label: "Personne à contacter en cas d'urgence (téléphone)" },
+    { el: form.querySelector("#nom"), err: "nom-err", label: "Nom" },
+    { el: form.querySelector("#prenom"), err: "prenom-err", label: "Prénom" },
+    { el: form.querySelector("#naissance"), err: "naissance-err", label: "Date de naissance" },
+    { el: form.querySelector("#tel"), err: "tel-err", label: "Téléphone" },
+    { el: form.querySelector("#email"), err: "email-err", label: "E-mail" },
+    { el: form.querySelector("#urgence-nom"), err: "urgence-nom-err", label: "Contact d'urgence : nom" },
+    { el: form.querySelector("#urgence-tel"), err: "urgence-tel-err", label: "Contact d'urgence : téléphone" },
     { group: "droit_image", err: "image-err", label: "Droit à l'image", focus: form.querySelector('input[name="droit_image"]') },
-    { el: form.rgpd, err: "rgpd-err", label: "Consentement à l'utilisation des données" }
+    { el: form.querySelector("#rgpd"), err: "rgpd-err", label: "Consentement à l'utilisation des données" }
   ];
 
-  function isValid(c) {
+  const isValid = c => {
     if (c.group) return !!form.querySelector(`input[name="${c.group}"]:checked`);
     if (c.el.type === "tel") return c.el.value.replace(/\D/g, "").length >= 10 && c.el.checkValidity();
     return c.el.checkValidity();
-  }
+  };
 
-  function showError(c, invalid) {
+  const showError = (c, invalid) => {
     document.getElementById(c.err).hidden = !invalid;
     if (c.el) c.el.setAttribute("aria-invalid", String(invalid));
-  }
+  };
 
+  // Une erreur affichée disparaît dès que le champ est corrigé
   checks.forEach(c => {
     const inputs = c.group ? form.querySelectorAll(`input[name="${c.group}"]`) : [c.el];
     inputs.forEach(i => i.addEventListener("change", () => {
       if (!document.getElementById(c.err).hidden) showError(c, !isValid(c));
     }));
   });
+
+  const showSummary = html => {
+    summary.innerHTML = html;
+    summary.hidden = false;
+    summary.focus();
+  };
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
@@ -402,71 +358,39 @@ function initForm() {
     });
 
     if (errors.length) {
-      summary.innerHTML = `<h3>Le formulaire contient ${errors.length} erreur${errors.length > 1 ? "s" : ""}</h3>
-        <ul>${errors.map(c => `<li><a href="#${(c.el || c.focus).id || ""}">${c.label}</a></li>`).join("")}</ul>`;
-      summary.hidden = false;
-      summary.querySelectorAll("a").forEach((a, i) => {
-        a.addEventListener("click", ev => {
-          ev.preventDefault();
-          (errors[i].el || errors[i].focus).focus();
-        });
-      });
-      summary.focus();
+      showSummary(`<h3>Le formulaire contient ${errors.length} erreur${errors.length > 1 ? "s" : ""}</h3>
+        <ul>${errors.map((c, i) => `<li><a href="#" data-i="${i}">${c.label}</a></li>`).join("")}</ul>`);
+      summary.querySelectorAll("a[data-i]").forEach(a => a.addEventListener("click", ev => {
+        ev.preventDefault();
+        const c = errors[Number(a.dataset.i)];
+        (c.el || c.focus).focus();
+      }));
       return;
     }
     summary.hidden = true;
 
     if (form.action.includes("XXXXX")) {
-      summary.innerHTML = "<h3>Formulaire pas encore activé</h3><p>Le formulaire n'est pas encore relié à Formspree. En attendant, appelez le 07 69 11 41 50 ou écrivez à lesamisdubal@gmail.com.</p>";
-      summary.hidden = false;
-      summary.focus();
+      showSummary("<h3>Formulaire pas encore activé</h3><p>En attendant, appelez le 07 69 11 41 50 ou écrivez à lesamisdubal@gmail.com.</p>");
       return;
     }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Envoi en cours…";
-
     try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" }
-      });
-      if (!response.ok) throw new Error("Erreur d'envoi");
+      const res = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error("Erreur d'envoi");
       form.reset();
       checks.forEach(c => showError(c, false));
-      success.textContent = "Merci ! Votre pré-inscription a bien été envoyée. Nous vous rappellerons très vite pour la confirmer.";
+      success.textContent = "Merci ! Votre pré-inscription a bien été envoyée. Nous vous recontacterons très vite.";
       success.hidden = false;
       success.focus();
     } catch (err) {
-      summary.innerHTML = "<h3>L'envoi n'a pas fonctionné</h3><p>Merci de réessayer dans quelques instants, ou contactez-nous au 07 69 11 41 50 / lesamisdubal@gmail.com.</p>";
-      summary.hidden = false;
-      summary.focus();
+      showSummary("<h3>L'envoi n'a pas fonctionné</h3><p>Merci de réessayer dans quelques instants, ou contactez-nous au 07 69 11 41 50 / lesamisdubal@gmail.com.</p>");
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = "Envoyer ma pré-inscription";
+      submitBtn.textContent = submitLabel;
     }
   });
-}
-
-/* ---------- 5. Lien actif dans le menu ---------- */
-function initActiveNav() {
-  const links = document.querySelectorAll('.main-nav a[href^="#"]:not(.nav-cta)');
-  if (!("IntersectionObserver" in window)) return;
-  const map = new Map();
-  links.forEach(l => {
-    const s = document.querySelector(l.getAttribute("href"));
-    if (s) map.set(s, l);
-  });
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (en.isIntersecting) {
-        links.forEach(l => l.removeAttribute("aria-current"));
-        map.get(en.target).setAttribute("aria-current", "true");
-      }
-    });
-  }, { rootMargin: "-40% 0px -55% 0px" });
-  map.forEach((_, s) => obs.observe(s));
 }
 
 /* ---------- Utilitaires ---------- */
