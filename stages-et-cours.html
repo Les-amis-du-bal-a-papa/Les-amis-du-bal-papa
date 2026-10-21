@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stages et cours – Les amis du bal à Papa</title>
+  <meta name="description" content="Stages et cours de danse de bal à Chambéry : rock, tango, valse, cha-cha, fox-trot, paso doble, bachata, danse en ligne.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#contenu">Aller directement au contenu</a>
+
+  <!-- ================= EN-TÊTE ================= -->
+  <header class="site-header" id="haut">
+    <div class="container header-top">
+      <a class="site-title" href="index.html">
+        <span class="site-name">Les amis du bal à Papa</span>
+        <span class="site-tagline">Maintenir et promouvoir les danses de bal qui font partie de la culture française</span>
+      </a>
+
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">
+        <span class="menu-toggle-icon" aria-hidden="true"></span>
+        <span>Menu</span>
+      </button>
+    </div>
+
+    <nav class="main-nav" id="main-nav" aria-label="Menu principal">
+      <ul class="container nav-list" id="menu-principal">
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-bal">Bal à papa</button>
+          <ul class="sub-menu" id="sub-bal">
+            <li><a href="bal-a-papa.html">L'association</a></li>
+            <li><a href="bal-a-papa.html#salles">Nos salles</a></li>
+            <li><a href="bal-a-papa.html#infos-pratiques">Infos pratiques</a></li>
+          </ul>
+        </li>
+        <li class="nav-item is-current">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-stages">Stages et cours</button>
+          <ul class="sub-menu" id="sub-stages">
+            <li><a href="stages-et-cours.html">Stages et cours</a></li>
+            <li><a href="stages-et-cours.html#danses">Nos danses</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-evenements">Les évènements</button>
+          <ul class="sub-menu" id="sub-evenements">
+            <li><a href="evenements.html">Les grands évènements</a></li>
+            <li><a href="evenements.html#prochain-bal">Le prochain bal</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-agendas">Agendas</button>
+          <ul class="sub-menu" id="sub-agendas">
+            <li><a href="agenda.html">Agenda du bal</a></li>
+            <li><a href="agenda.html#agenda-liste">Liste des dates</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="adhesion.html">Adhésion</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Bandeau d'annonce (géré depuis l'espace gestionnaires) -->
+  <div class="annonce" id="annonce" role="status" hidden>
+    <p class="container" id="annonce-texte"></p>
+  </div>
+
+  <main id="contenu" tabindex="-1">
+
+    <section id="stages" class="section" aria-labelledby="titre-stages">
+      <div class="container container-narrow">
+        <h1 class="section-title" id="titre-stages">Stages et cours</h1>
+        <span class="separator separator-center" aria-hidden="true"></span>
+        <p class="lead">
+          Retrouvez-nous sur Chambéry pour apprendre ou vous perfectionner en danse de bal.
+        </p>
+        <p>
+          Des stages de danse sont en préparation à partir de <strong>janvier 2027</strong>.
+          Leurs dates seront publiées dans l'agenda dès qu'elles seront fixées.
+        </p>
+
+        <h3 id="danses">Nos danses</h3>
+        <!-- Contenu géré depuis l'espace gestionnaires (data/infos.json) -->
+        <ul class="tags" id="danses-liste">
+          <li>Rock</li><li>Tango</li><li>Valse</li><li>Cha-cha</li>
+          <li>Fox-trot</li><li>Paso doble</li><li>Bachata</li><li>Danse en ligne</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= PIED DE PAGE ================= -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>© <span id="annee">2026</span> Les amis du bal à Papa</p>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="admin.html">Espace gestionnaires</a>
+      <a href="#haut">Haut de page <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+
+</body>
+</html>

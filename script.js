@@ -156,12 +156,6 @@ function weekday(d) { return WEEKDAYS_LONG[(d.getDay() + 6) % 7]; }
 function longDate(d) { return `${weekday(d)} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; }
 
 function initAgenda(data) {
-  const calendarEl = document.getElementById("calendar");
-  if (!calendarEl) return;
-  const listEl = document.getElementById("event-list");
-  const emptyEl = document.getElementById("event-empty");
-  const periodEl = document.getElementById("agenda-period");
-
   const events = data
     .filter(e => e && e.date && !isNaN(parseDate(e.date)))
     .map((e, i) => ({ ...e, id: "evt-" + i, d: parseDate(e.date) }))
@@ -169,7 +163,16 @@ function initAgenda(data) {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Page « Les évènements » : le prochain bal
   renderNextBal(events.find(e => e.d >= today));
+
+  // Page « Agenda » : le calendrier trimestriel
+  const calendarEl = document.getElementById("calendar");
+  if (!calendarEl) return;
+  const listEl = document.getElementById("event-list");
+  const emptyEl = document.getElementById("event-empty");
+  const periodEl = document.getElementById("agenda-period");
 
   // Trimestre affiché au départ : celui d'aujourd'hui (ou du premier évènement s'il est plus tard)
   let start = today;

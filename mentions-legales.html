@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mentions légales – Les amis du bal à Papa</title>
+  <meta name="description" content="Mentions légales et données personnelles du site des Amis du bal à Papa.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#contenu">Aller directement au contenu</a>
+
+  <!-- ================= EN-TÊTE ================= -->
+  <header class="site-header" id="haut">
+    <div class="container header-top">
+      <a class="site-title" href="index.html">
+        <span class="site-name">Les amis du bal à Papa</span>
+        <span class="site-tagline">Maintenir et promouvoir les danses de bal qui font partie de la culture française</span>
+      </a>
+
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu-principal">
+        <span class="menu-toggle-icon" aria-hidden="true"></span>
+        <span>Menu</span>
+      </button>
+    </div>
+
+    <nav class="main-nav" id="main-nav" aria-label="Menu principal">
+      <ul class="container nav-list" id="menu-principal">
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-bal">Bal à papa</button>
+          <ul class="sub-menu" id="sub-bal">
+            <li><a href="bal-a-papa.html">L'association</a></li>
+            <li><a href="bal-a-papa.html#salles">Nos salles</a></li>
+            <li><a href="bal-a-papa.html#infos-pratiques">Infos pratiques</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-stages">Stages et cours</button>
+          <ul class="sub-menu" id="sub-stages">
+            <li><a href="stages-et-cours.html">Stages et cours</a></li>
+            <li><a href="stages-et-cours.html#danses">Nos danses</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-evenements">Les évènements</button>
+          <ul class="sub-menu" id="sub-evenements">
+            <li><a href="evenements.html">Les grands évènements</a></li>
+            <li><a href="evenements.html#prochain-bal">Le prochain bal</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link has-sub" aria-expanded="false" aria-controls="sub-agendas">Agendas</button>
+          <ul class="sub-menu" id="sub-agendas">
+            <li><a href="agenda.html">Agenda du bal</a></li>
+            <li><a href="agenda.html#agenda-liste">Liste des dates</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="adhesion.html">Adhésion</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Bandeau d'annonce (géré depuis l'espace gestionnaires) -->
+  <div class="annonce" id="annonce" role="status" hidden>
+    <p class="container" id="annonce-texte"></p>
+  </div>
+
+  <main id="contenu" tabindex="-1">
+
+    <section class="section">
+      <div class="container container-narrow">
+        <h1 class="section-title">Mentions légales</h1>
+        <span class="separator" aria-hidden="true"></span>
+
+        <h2>L'association</h2>
+        <p>LES AMIS DU BAL A PAPA – association déclarée (loi 1901)<br>
+          SIREN 441&nbsp;810&nbsp;132 – SIRET 441&nbsp;810&nbsp;132&nbsp;00031<br>
+          Siège social&nbsp;: 277 avenue du Covet, 73000 Chambéry<br>
+          Contact&nbsp;: <a href="mailto:lesamisdubal@gmail.com">lesamisdubal@gmail.com</a> –
+          <a href="tel:+33769114150">07&nbsp;69&nbsp;11&nbsp;41&nbsp;50</a></p>
+        <p>Directeur de la publication&nbsp;: le président de l'association.</p>
+        <p>TVA non applicable – exonération conformément à l'article 261-7-1° du CGI.</p>
+
+        <h2>Hébergement</h2>
+        <p>GitHub Inc. (GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.</p>
+
+        <h2 id="donnees-personnelles">Données personnelles</h2>
+        <p>Les informations du formulaire de pré-inscription servent uniquement à la gestion des adhésions.
+          Elles ne sont ni vendues ni cédées, et sont conservées pendant la durée de l'adhésion,
+          puis 3 ans maximum après le dernier contact.</p>
+        <p>Pour consulter, rectifier ou supprimer vos données&nbsp;:
+          <a href="mailto:lesamisdubal@gmail.com">lesamisdubal@gmail.com</a>.
+          Vous pouvez aussi adresser une réclamation à la CNIL (cnil.fr).</p>
+        <p>Ce site n'utilise aucun cookie publicitaire ni outil de suivi.</p>
+
+        <p class="center" style="margin-top:2.5rem"><a class="btn btn-outline" href="index.html">Retour au site</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= PIED DE PAGE ================= -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>© <span id="annee">2026</span> Les amis du bal à Papa</p>
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="admin.html">Espace gestionnaires</a>
+      <a href="#haut">Haut de page <span aria-hidden="true">↑</span></a>
+    </div>
+  </footer>
+
+</body>
+</html>

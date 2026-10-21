@@ -6,7 +6,9 @@ Site statique hébergé sur GitHub Pages, avec un espace administrateur Pages CM
 
 | Élément | Rôle |
 |---|---|
-| `index.html` | Le site (page unique) |
+| `index.html` | Accueil (les trois vignettes) |
+| `bal-a-papa.html`, `stages-et-cours.html`, `evenements.html`, `agenda.html`, `adhesion.html` | Une page par onglet du menu |
+| `mentions-legales.html` | Mentions légales et données personnelles |
 | `admin.html` | Page « Espace gestionnaires » (mode d'emploi + lien vers l'administration) |
 | `style.css` | Mise en forme |
 | `script.js` | Menu, agenda, formulaire, chargement des contenus |
@@ -20,7 +22,7 @@ Site statique hébergé sur GitHub Pages, avec un espace administrateur Pages CM
    Astuce : le fichier `.pages.yml` est « caché » sur Mac et Linux. Sur GitHub, « Upload files » l'accepte
    si vous glissez le dossier entier.
 2. *Settings → Pages* : Source « Deploy from a branch », branche `main`, dossier `/ (root)`.
-3. Remplacer `XXXXX` dans `index.html` par l'identifiant Formspree.
+3. Remplacer `XXXXX` dans `adhesion.html` par l'identifiant Formspree.
 
 ## Activer l'espace administrateur (une seule fois)
 
