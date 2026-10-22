@@ -7,6 +7,8 @@
   <meta name="description" content="Adhérer aux Amis du bal à Papa : formulaire de pré-inscription, règlement sur place.">
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="lib/supabase-2.117.2.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -70,6 +72,8 @@
         <span class="separator separator-center" aria-hidden="true"></span>
         <p class="lead center">Deux façons de nous rejoindre. Aucun paiement en ligne&nbsp;: le règlement se fait sur place, à la billetterie.</p>
 
+        <noscript><p class="form-summary">Les formulaires ont besoin de JavaScript. Vous pouvez aussi vous inscrire par téléphone au 07 69 11 41 50.</p></noscript>
+
         <ul class="choices">
           <li class="choice-card">
             <h2>Adhésion à l'année</h2>
@@ -93,9 +97,8 @@
         <div class="form-summary" id="form-summary" role="alert" tabindex="-1" hidden></div>
         <div class="form-success" id="form-success" role="status" tabindex="-1" hidden></div>
 
-        <!-- Remplacez XXXXX par votre identifiant Formspree -->
-        <form id="form-inscription" class="form" action="https://formspree.io/f/XXXXX" method="POST" novalidate>
-          <input type="hidden" name="_subject" value="Nouvelle pré-inscription – Les amis du bal à Papa">
+        <!-- Les inscriptions sont enregistrées dans la base de l'association (voir config.js) -->
+        <form id="form-inscription" class="form" method="post" novalidate>
           <p class="visually-hidden" aria-hidden="true">
             <label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
           </p>
@@ -197,10 +200,7 @@
         <div class="form-summary" id="ev-summary" role="alert" tabindex="-1" hidden></div>
         <div class="form-success" id="ev-success" role="status" tabindex="-1" hidden></div>
 
-        <!-- Même identifiant Formspree que le formulaire d'adhésion -->
-        <form id="form-evenement" class="form" action="https://formspree.io/f/XXXXX" method="POST" novalidate>
-          <input type="hidden" name="_subject" value="Inscription à un évènement – Les amis du bal à Papa">
-          <input type="hidden" name="type_inscription" value="Évènement unique">
+        <form id="form-evenement" class="form" method="post" novalidate>
           <p class="visually-hidden" aria-hidden="true">
             <label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
           </p>

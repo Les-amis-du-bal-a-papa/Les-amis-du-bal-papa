@@ -3,7 +3,8 @@
    1. Menu mobile et sous-menus déroulants
    2. Contenus gérés depuis l'espace gestionnaires (dossier data/)
    3. Agenda trimestriel + « Le prochain bal » + liste des évènements à réserver
-   4. Formulaires (Formspree) : adhésion à l'année et inscription à un évènement
+   4. Formulaires : adhésion à l'année et inscription à un évènement,
+      enregistrées dans la base de l'association (Supabase, réglages dans config.js)
    ========================================================= */
 
 /* Contenus de secours : utilisés si le dossier data/ ne peut pas être lu
@@ -362,6 +363,7 @@ function fillEventSelect(list) {
 /* ---------- 4. Formulaires ---------- */
 function initForms() {
   setupForm({
+    type: "adhesion",
     formId: "form-inscription", summaryId: "form-summary", successId: "form-success", submitId: "form-submit",
     successText: "Merci ! Votre pré-inscription a bien été envoyée. Nous vous recontacterons très vite.",
     checks: [
@@ -378,6 +380,7 @@ function initForms() {
   });
 
   setupForm({
+    type: "evenement",
     formId: "form-evenement", summaryId: "ev-summary", successId: "ev-success", submitId: "ev-submit",
     successText: "Merci ! Votre inscription a bien été envoyée. Nous vous attendons sur la piste ; l'entrée se règle sur place.",
     checks: [
@@ -451,7 +454,12 @@ function setupForm(cfg) {
     }
     summary.hidden = true;
 
-    if (form.action.includes("XXXXX")) {
+    // Piège à robots : un champ invisible rempli = envoi ignoré, sans le dire
+    const piege = form.querySelector('input[name="_gotcha"]');
+    if (piege && piege.value) { form.reset(); success.textContent = cfg.successText; success.hidden = false; return; }
+
+    const db = getDatabase();
+    if (!db) {
       showSummary("<h3>Formulaire pas encore activé</h3><p>En attendant, appelez le 07 69 11 41 50 ou écrivez à lesamisdubal@gmail.com.</p>");
       return;
     }
@@ -459,20 +467,65 @@ function setupForm(cfg) {
     submitBtn.disabled = true;
     submitBtn.textContent = "Envoi en cours…";
     try {
-      const res = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
-      if (!res.ok) throw new Error("Erreur d'envoi");
+      const { error } = await db.from("inscriptions").insert(toRecord(form, cfg.type));
+      if (error) throw error;
       form.reset();
       checks.forEach(c => showError(c, false));
       success.textContent = cfg.successText;
       success.hidden = false;
       success.focus();
     } catch (err) {
+      console.error(err);
       showSummary("<h3>L'envoi n'a pas fonctionné</h3><p>Merci de réessayer dans quelques instants, ou contactez-nous au 07 69 11 41 50 / lesamisdubal@gmail.com.</p>");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = submitLabel;
     }
   });
+}
+
+/* ---------- Base des inscriptions ---------- */
+let dbClient = null;
+function getDatabase() {
+  const c = window.BAL_CONFIG || {};
+  if (!c.SUPABASE_URL || !c.SUPABASE_ANON_KEY || !window.supabase) return null;
+  if (!dbClient) {
+    dbClient = window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+  }
+  return dbClient;
+}
+
+// Transforme le formulaire en fiche pour la base (mêmes noms que supabase/installation.sql)
+function toRecord(form, type) {
+  const v = name => {
+    const el = form.elements[name];
+    return el && typeof el.value === "string" ? el.value.trim() : "";
+  };
+  const orNull = x => (x === "" ? null : x);
+  const record = {
+    type,
+    nom: v("nom"),
+    prenom: v("prenom"),
+    telephone: v("telephone"),
+    email: v("email"),
+    droit_image: v("droit_image") === "J'autorise",
+    consentement_rgpd: !!(form.elements.consentement_rgpd && form.elements.consentement_rgpd.checked)
+  };
+  if (type === "adhesion") {
+    record.date_naissance = orNull(v("date_naissance"));
+    record.urgence_nom = orNull(v("urgence_nom"));
+    record.urgence_telephone = orNull(v("urgence_telephone"));
+  } else {
+    const select = form.elements.evenement;
+    const opt = select && select.selectedOptions[0];
+    record.evenement = orNull(v("evenement"));
+    record.evenement_date = orNull(opt && opt.dataset.date ? opt.dataset.date : "");
+    record.nombre_personnes = Number(v("nombre_personnes")) || 1;
+    record.message = orNull(v("message"));
+  }
+  return record;
 }
 
 /* ---------- Utilitaires ---------- */

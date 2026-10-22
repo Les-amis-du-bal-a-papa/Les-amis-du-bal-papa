@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Inscriptions reçues – Les amis du bal à Papa</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="lib/supabase-2.117.2.js" defer></script>
+  <script src="gestion.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller directement au contenu</a>
+
+  <header class="site-header">
+    <div class="container header-top">
+      <a class="site-title" href="index.html">
+        <span class="site-name">Les amis du bal à Papa</span>
+        <span class="site-tagline">Espace gestionnaires – Inscriptions reçues</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="contenu" tabindex="-1">
+    <section class="section">
+      <div class="container">
+        <h1 class="section-title">Inscriptions reçues</h1>
+        <span class="separator" aria-hidden="true"></span>
+
+        <!-- Messages (erreurs, confirmations) -->
+        <div class="form-summary" id="g-erreur" role="alert" tabindex="-1" hidden></div>
+        <div class="form-success" id="g-info" role="status" tabindex="-1" hidden></div>
+
+        <!-- Base pas encore réglée -->
+        <div class="admin-tips" id="g-non-configure" hidden>
+          <h2 class="g-h2">La base des inscriptions n'est pas encore activée</h2>
+          <p>Il faut créer le projet Supabase puis remplir le fichier <code>config.js</code>.
+            La marche à suivre est dans le fichier <code>LISEZMOI.md</code>.</p>
+        </div>
+
+        <!-- Connexion -->
+        <div class="container-narrow g-login" id="g-connexion" hidden>
+          <p class="lead center">Pour voir les inscriptions, connectez-vous avec l'adresse de l'association.
+            Vous recevrez un lien par e-mail : il suffit de cliquer dessus.</p>
+          <form id="g-form-connexion" class="form" novalidate>
+            <div class="field">
+              <label for="g-email">Adresse e-mail</label>
+              <input type="email" id="g-email" name="email" autocomplete="email" required value="lesamisdubal@gmail.com">
+            </div>
+            <p class="center"><button type="submit" class="btn btn-large" id="g-envoyer-lien">Recevoir le lien de connexion</button></p>
+          </form>
+          <p class="note center">Le lien arrive en une minute environ. Pensez à regarder dans les « Spams ».</p>
+        </div>
+
+        <!-- Inscriptions -->
+        <div id="g-espace" hidden>
+          <div class="g-bar">
+            <p>Connecté avec <strong id="g-qui"></strong></p>
+            <div class="g-bar-actions">
+              <button type="button" class="btn btn-outline" id="g-actualiser">Actualiser</button>
+              <button type="button" class="btn btn-outline" id="g-export">Télécharger (tableur)</button>
+              <button type="button" class="btn btn-outline" id="g-deconnexion">Se déconnecter</button>
+            </div>
+          </div>
+
+          <ul class="g-compteurs" aria-label="En résumé">
+            <li><b id="g-nb-nouvelles">0</b> nouvelle(s) à traiter</li>
+            <li><b id="g-nb-adhesions">0</b> adhésion(s)</li>
+            <li><b id="g-nb-evenements">0</b> inscription(s) à un évènement</li>
+          </ul>
+
+          <fieldset class="g-filtres">
+            <legend>Afficher</legend>
+            <div class="field">
+              <label for="g-f-type">Type</label>
+              <select id="g-f-type">
+                <option value="">Toutes les inscriptions</option>
+                <option value="adhesion">Adhésions à l'année</option>
+                <option value="evenement">Inscriptions à un évènement</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="g-f-evenement">Évènement</label>
+              <select id="g-f-evenement">
+                <option value="">Tous les évènements</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="g-f-statut">Suivi</label>
+              <select id="g-f-statut">
+                <option value="">Tous</option>
+                <option value="nouvelle">Nouvelles</option>
+                <option value="confirmee">Confirmées</option>
+                <option value="annulee">Annulées</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="g-f-recherche">Rechercher un nom</label>
+              <input type="text" id="g-f-recherche" autocomplete="off">
+            </div>
+          </fieldset>
+
+          <p class="g-total" id="g-total" aria-live="polite"></p>
+          <ol class="g-liste" id="g-liste"></ol>
+
+          <p class="note">Données personnelles : supprimez une inscription quand elle n'est plus utile
+            (au plus tard 3 ans après le dernier contact). Une suppression est définitive.</p>
+        </div>
+
+        <p class="center" style="margin-top:2.5rem"><a class="btn btn-outline" href="admin.html">Retour à l'espace gestionnaires</a></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

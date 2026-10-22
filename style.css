@@ -338,6 +338,47 @@ main:focus { outline: none; }
 .admin-tips { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.5rem; margin-bottom: 2rem; }
 .admin-tips ul { margin: 0; padding-left: 1.2rem; }
 
+/* ---------- Page « Inscriptions reçues » (gestionnaires) ---------- */
+.btn-danger { background: var(--white); color: var(--error); border-color: var(--error); }
+.btn-danger:hover { background: var(--white); color: #7f0017; border-color: #7f0017; }
+.g-h2 { font-size: 1.3rem; margin-top: 0; }
+.g-login { margin: 0 auto; }
+.g-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+.g-bar p { margin: 0; }
+.g-bar-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.g-bar-actions .btn { text-transform: none; letter-spacing: 0; font-size: 1rem; }
+.g-compteurs { list-style: none; padding: 0; margin: 1.5rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.g-compteurs li { border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.2rem; color: var(--grey-dark); }
+.g-compteurs b { display: block; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 2.2rem; color: var(--black); line-height: 1.1; }
+.g-filtres { border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.25rem 0; margin: 0 0 1.25rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 1rem; }
+.g-filtres legend { font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--black); padding: 0 0.4rem; }
+.g-filtres label, .g-statut label, .g-note label { display: block; font-weight: 600; color: var(--black); margin-bottom: 0.3rem; font-size: 1rem; }
+.g-filtres select, .g-filtres input, .g-statut select, .g-note textarea {
+  width: 100%; min-height: 50px; padding: 0.55rem 0.8rem;
+  font: inherit; font-size: 1.05rem; color: var(--black); background: var(--white);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+}
+.g-note textarea { min-height: 70px; resize: vertical; line-height: 1.5; }
+.g-total { font-weight: 700; color: var(--black); }
+.g-liste { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: 1.25rem; }
+.g-vide { color: var(--grey); padding: 1.5rem 0; }
+.g-carte { border: 1px solid var(--line); border-left: 6px solid var(--line-strong); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+.g-carte.statut-nouvelle { border-left-color: var(--btn); }
+.g-carte.statut-annulee { border-left-color: var(--line); }
+.g-carte.statut-annulee .g-nom { text-decoration: line-through; color: var(--grey); }
+.g-carte-tete { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.g-type { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey); }
+.g-nom { font-size: 1.4rem; margin: 0.1rem 0 0.1rem; }
+.g-recue { margin: 0; color: var(--grey); font-size: 1rem; }
+.g-statut { margin: 0; min-width: 190px; }
+.g-contact { margin: 0.8rem 0; font-size: 1.15rem; }
+.g-details { margin: 0 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem 1.5rem; }
+.g-details dt { color: var(--grey); font-size: 0.95rem; }
+.g-details dd { margin: 0; color: var(--black); }
+.g-note { margin-bottom: 0.8rem; }
+.g-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.g-actions .btn { text-transform: none; letter-spacing: 0; font-size: 1rem; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1000px) {
   .cards { gap: 2rem; }
@@ -364,6 +405,8 @@ main:focus { outline: none; }
   .calendar { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .choices { grid-template-columns: 1fr; }
+  .g-filtres { grid-template-columns: 1fr 1fr; }
+  .g-compteurs { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {
@@ -379,6 +422,8 @@ main:focus { outline: none; }
   .footer-grid { grid-template-columns: 1fr; }
   .form fieldset { padding: 1rem 1rem 0.25rem; }
   .contact-links .btn { width: 100%; }
+  .g-filtres { grid-template-columns: 1fr; }
+  .g-bar-actions .btn { flex: 1 1 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
