@@ -21,6 +21,7 @@ jobs:
         run: |
           URL=$(grep -oP 'SUPABASE_URL:\s*"\K[^"]+' config.js || true)
           KEY=$(grep -oP 'SUPABASE_ANON_KEY:\s*"\K[^"]+' config.js || true)
+          case "$KEY" in sb_publishable_*|eyJ*) ;; *) KEY="";; esac
           if [ -z "$URL" ] || [ -z "$KEY" ]; then
             echo "config.js n'est pas encore rempli : rien à faire."
             exit 0

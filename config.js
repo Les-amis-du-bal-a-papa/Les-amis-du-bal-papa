@@ -10,6 +10,6 @@
    Ne collez JAMAIS ici la clé « service_role » / « secret ».
    ========================================================= */
 window.BAL_CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: ""
+  SUPABASE_URL: "https://lqlegfzmmpnbgjyibzjs.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_KG3y9IgAVHp8HzsLXAX8dQ_FQskiwZV"
 };

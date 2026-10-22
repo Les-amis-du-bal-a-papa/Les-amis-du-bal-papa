@@ -36,9 +36,12 @@ Site statique hébergé sur GitHub Pages, avec :
 Les formulaires d'adhésion et d'inscription à un évènement enregistrent les réponses dans une base Supabase.
 Seuls les gestionnaires connectés peuvent les lire.
 
-1. Créer un compte sur https://supabase.com **avec l'adresse lesamisdubal@gmail.com**
-   (important : sans réglage e-mail supplémentaire, Supabase n'envoie les liens de connexion
-   qu'aux adresses membres du compte).
+1. Compte Supabase : **déjà créé avec jimmynewtonson@hotmail.com**.
+   Sans réglage e-mail supplémentaire, Supabase n'envoie les liens de connexion qu'aux adresses
+   **membres de l'organisation**. Il faut donc y ajouter l'adresse de l'association :
+   - Supabase → *Organization settings* → *Team* → *Invite* : `lesamisdubal@gmail.com`,
+     rôle **Read-only** (lecture seule : suffit pour recevoir les liens, ne permet rien d'autre) ;
+   - ouvrir la boîte lesamisdubal@gmail.com et accepter l'invitation.
 2. *New project* : nom « amis-du-bal », un mot de passe de base de données (à noter et garder),
    région **West EU (Paris)**, offre **Free**.
 3. Menu *SQL Editor* → *New query* : coller tout le fichier `supabase/installation.sql`, puis *Run*.
@@ -47,8 +50,15 @@ Seuls les gestionnaires connectés peuvent les lire.
    - *Sign In / Providers* (ou *Settings*) : désactiver « Allow new users to sign up » ;
    - *URL Configuration* : « Site URL » = l'adresse du site, et ajouter dans « Redirect URLs »
      l'adresse de la page `…/gestion-inscriptions.html`.
-5. Menu *Project Settings* → *API* (ou *Data API*) : copier « Project URL » et la clé **anon / publishable**
-   dans `config.js`. Ne jamais y mettre la clé *service_role* / *secret*.
+5. Remplir `config.js` (deux valeurs) :
+   - **Adresse du projet** : déjà inscrite (`https://lqlegfzmmpnbgjyibzjs.supabase.co`). Elle se trouve dans
+     *Integrations* → *Data API* → « API URL », **sans** la fin `/rest/v1/`.
+   - **Clé publique** : roue dentée *Project Settings* (en bas du menu de gauche) → *API Keys* →
+     copier la clé **Publishable** (elle commence par `sb_publishable_`), ou, dans l'onglet des anciennes clés
+     (*Legacy API keys*), la clé **anon** (elle commence par `eyJ`). La coller à la place de
+     `COLLER_ICI_LA_CLE_PUBLISHABLE` (déjà fait).
+   - Ne jamais y mettre la clé **Secret** ni **service_role** : elle donnerait tous les droits sur la base.
+   - Laisser « Enable Data API » activé (*Integrations* → *Data API*).
 6. Envoyer `config.js` sur GitHub. Faire un essai : une inscription depuis le site, puis l'ouvrir sur
    `gestion-inscriptions.html`.
 

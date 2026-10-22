@@ -488,7 +488,7 @@ function setupForm(cfg) {
 let dbClient = null;
 function getDatabase() {
   const c = window.BAL_CONFIG || {};
-  if (!c.SUPABASE_URL || !c.SUPABASE_ANON_KEY || !window.supabase) return null;
+  if (!configOk(c) || !window.supabase) return null;
   if (!dbClient) {
     dbClient = window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY, {
       auth: { persistSession: false, autoRefreshToken: false }
@@ -526,6 +526,11 @@ function toRecord(form, type) {
     record.message = orNull(v("message"));
   }
   return record;
+}
+
+// Vrai seulement avec une vraie adresse et une vraie clé publique (pas le texte à remplacer)
+function configOk(c) {
+  return /^https:\/\/.+\.supabase\.co$/.test(c.SUPABASE_URL || "") && /^(sb_publishable_|eyJ)/.test(c.SUPABASE_ANON_KEY || "");
 }
 
 /* ---------- Utilitaires ---------- */

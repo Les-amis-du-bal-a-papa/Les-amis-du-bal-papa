@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", demarrer);
 /* ---------- Démarrage et connexion ---------- */
 function demarrer() {
   const c = window.BAL_CONFIG || {};
-  if (!c.SUPABASE_URL || !c.SUPABASE_ANON_KEY || !window.supabase) {
+  const ok = /^https:\/\/.+\.supabase\.co$/.test(c.SUPABASE_URL || "") && /^(sb_publishable_|eyJ)/.test(c.SUPABASE_ANON_KEY || "");
+  if (!ok || !window.supabase) {
     montrer("g-non-configure");
     return;
   }
