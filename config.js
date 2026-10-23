@@ -6,7 +6,7 @@
      • SUPABASE_URL      = « Project URL »       (https://xxxx.supabase.co)
      • SUPABASE_ANON_KEY = la clé « anon » / « publishable »
    Ces deux valeurs sont faites pour être publiques : la sécurité repose
-   sur les règles d'accès créées par supabase/installation.sql.
+   sur les règles d'accès créées par supabase/1-installation.sql.
    Ne collez JAMAIS ici la clé « service_role » / « secret ».
    ========================================================= */
 window.BAL_CONFIG = {

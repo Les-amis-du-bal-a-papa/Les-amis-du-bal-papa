@@ -2,7 +2,7 @@
    Les amis du bal à Papa – Page « Inscriptions reçues »
    Réservée aux gestionnaires : connexion par lien reçu par e-mail,
    puis lecture, suivi, suppression et export des inscriptions.
-   La sécurité est assurée côté base (supabase/installation.sql) :
+   La sécurité est assurée côté base (supabase/1-installation.sql) :
    même en modifiant cette page, une personne non autorisée ne voit rien.
    ========================================================= */
 
@@ -11,7 +11,7 @@ const STATUTS = { nouvelle: "Nouvelle", confirmee: "Confirmée", annulee: "Annul
 
 let db = null;
 let toutes = [];
-let agenda = [];   // bals et stages (data/agenda.json), pour rédiger les confirmations
+let agenda = [];   // bals et stages (agenda de la base), pour rédiger les confirmations
 
 document.addEventListener("DOMContentLoaded", demarrer);
 
@@ -96,10 +96,15 @@ async function charger() {
     return erreur("Les inscriptions n'ont pas pu être chargées. Réessayez avec le bouton « Actualiser ».");
   }
   toutes = data || [];
-  try {
-    const res = await fetch("data/agenda.json", { cache: "no-cache" });
-    if (res.ok) agenda = await res.json();
-  } catch (e) { /* sans agenda, l'e-mail reste rédigé, sans salle ni horaires */ }
+  // Agenda (salle et horaires pour les e-mails de confirmation) : base, sinon data/agenda.json
+  const ev = await db.from("evenements").select("date,titre,type,heure,lieu");
+  if (!ev.error && ev.data && ev.data.length) agenda = ev.data;
+  else {
+    try {
+      const res = await fetch("data/agenda.json", { cache: "no-cache" });
+      if (res.ok) agenda = await res.json();
+    } catch (e) { /* sans agenda, l'e-mail reste rédigé, sans salle ni horaires */ }
+  }
   remplirFiltreEvenements();
   afficher();
 }

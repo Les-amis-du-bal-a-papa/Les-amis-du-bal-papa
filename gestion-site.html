@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Mettre à jour le site – Les amis du bal à Papa</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="lib/supabase-2.117.2.js" defer></script>
+  <script src="gestion-site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller directement au contenu</a>
+
+  <header class="site-header">
+    <div class="container header-top">
+      <a class="site-title" href="index.html">
+        <span class="site-name">Les amis du bal à Papa</span>
+        <span class="site-tagline">Espace gestionnaires – Mettre à jour le site</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="contenu" tabindex="-1">
+    <section class="section">
+      <div class="container">
+        <h1 class="section-title">Mettre à jour le site</h1>
+        <span class="separator" aria-hidden="true"></span>
+
+        <!-- Messages (erreurs, confirmations) -->
+        <div class="form-summary" id="g-erreur" role="alert" tabindex="-1" hidden></div>
+        <div class="form-success" id="g-info" role="status" tabindex="-1" hidden></div>
+
+        <!-- Base pas encore réglée -->
+        <div class="admin-tips" id="g-non-configure" hidden>
+          <h2 class="g-h2">La base du site n'est pas encore activée</h2>
+          <p>Il faut créer le projet Supabase puis remplir le fichier <code>config.js</code>.
+            La marche à suivre est dans le fichier <code>LISEZMOI.md</code>.</p>
+        </div>
+
+        <!-- Connexion -->
+        <div class="container-narrow g-login" id="g-connexion" hidden>
+          <p class="lead center">Pour modifier le site, connectez-vous avec l'adresse de l'association.
+            Vous recevrez un lien par e-mail : il suffit de cliquer dessus.</p>
+          <form id="g-form-connexion" class="form" novalidate>
+            <div class="field">
+              <label for="g-email">Adresse e-mail</label>
+              <input type="email" id="g-email" name="email" autocomplete="email" required value="lesamisdubal@gmail.com">
+            </div>
+            <p class="center"><button type="submit" class="btn btn-large" id="g-envoyer-lien">Recevoir le lien de connexion</button></p>
+          </form>
+          <p class="note center">Le lien arrive en une minute environ. Pensez à regarder dans les « Spams ».</p>
+        </div>
+
+        <!-- Espace de mise à jour -->
+        <div id="g-espace" hidden>
+          <div class="g-bar">
+            <p>Connecté avec <strong id="g-qui"></strong></p>
+            <div class="g-bar-actions">
+              <a class="btn btn-outline" href="agenda.html" target="_blank" rel="noopener">Voir le site<span class="visually-hidden"> (s'ouvre dans un nouvel onglet)</span></a>
+              <button type="button" class="btn btn-outline" id="g-deconnexion">Se déconnecter</button>
+            </div>
+          </div>
+
+          <nav class="s-sommaire" aria-label="Rubriques à modifier">
+            <a href="#s-agenda">Agenda et affiches</a>
+            <a href="#s-annonce">Annonce</a>
+            <a href="#s-infos">Infos pratiques et tarifs</a>
+            <a href="#s-salles">Salles</a>
+            <a href="#s-danses">Danses</a>
+          </nav>
+
+          <!-- ===== Agenda ===== -->
+          <section class="s-bloc" id="s-agenda" aria-labelledby="s-agenda-titre">
+            <h2 class="s-titre" id="s-agenda-titre">Agenda et affiches</h2>
+            <p class="s-aide">Les bals, stages et réunions affichés dans l'agenda du site. Le prochain bal apparaît
+              automatiquement dans « Les évènements », et on peut s'y inscrire depuis le site.</p>
+
+            <p><button type="button" class="btn" id="ev-ajouter">Ajouter un évènement</button></p>
+
+            <!-- Formulaire d'ajout / modification -->
+            <form class="form s-form" id="ev-form" novalidate hidden aria-labelledby="ev-form-titre">
+              <h3 class="s-sous-titre" id="ev-form-titre" tabindex="-1">Nouvel évènement</h3>
+              <input type="hidden" id="ev-id">
+
+              <div class="s-grille">
+                <div class="field">
+                  <label for="ev-date">Date <span class="req">(obligatoire)</span></label>
+                  <input type="date" id="ev-date" required>
+                </div>
+                <div class="field">
+                  <label for="ev-type">Type</label>
+                  <select id="ev-type">
+                    <option value="the">Bal</option>
+                    <option value="stage">Stage de danse</option>
+                    <option value="ag">Assemblée générale / réunion</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ev-titre">Titre <span class="req">(obligatoire)</span></label>
+                <input type="text" id="ev-titre" required maxlength="200" aria-describedby="ev-titre-aide">
+                <p class="field-help" id="ev-titre-aide">Par exemple : Bal avec le duo Jacky et Sandrine Guilloux</p>
+              </div>
+
+              <div class="s-grille">
+                <div class="field">
+                  <label for="ev-salle">Salle</label>
+                  <select id="ev-salle"></select>
+                </div>
+                <div class="field" id="ev-autre-lieu-champ" hidden>
+                  <label for="ev-autre-lieu">Autre lieu</label>
+                  <input type="text" id="ev-autre-lieu" maxlength="200" aria-describedby="ev-autre-lieu-aide">
+                  <p class="field-help" id="ev-autre-lieu-aide">Le nom du lieu et la ville, sans l'adresse exacte.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ev-heure">Horaires</label>
+                <input type="text" id="ev-heure" maxlength="120">
+              </div>
+
+              <div class="field">
+                <label for="ev-details">Détails (tarif, buvette, orchestre…)</label>
+                <textarea id="ev-details" rows="3" maxlength="2000"></textarea>
+              </div>
+
+              <fieldset class="s-image">
+                <legend>Affiche ou photo (facultatif)</legend>
+                <div class="s-image-apercu" id="ev-apercu" hidden>
+                  <img id="ev-apercu-img" alt="">
+                  <button type="button" class="btn btn-outline" id="ev-retirer-image">Retirer l'image</button>
+                </div>
+                <div class="field">
+                  <label for="ev-fichier" id="ev-fichier-label">Choisir une image sur l'ordinateur</label>
+                  <input type="file" id="ev-fichier" accept="image/jpeg,image/png,image/webp" aria-describedby="ev-fichier-aide">
+                  <p class="field-help" id="ev-fichier-aide">Photo ou affiche en JPG, PNG ou WebP. Elle est réduite automatiquement
+                    avant l'envoi. Ne publiez une photo de personnes que si elles ont autorisé le droit à l'image.</p>
+                </div>
+                <div class="field">
+                  <label for="ev-image-desc">Description de l'image, en une phrase</label>
+                  <input type="text" id="ev-image-desc" maxlength="500" aria-describedby="ev-image-desc-aide">
+                  <p class="field-help" id="ev-image-desc-aide">Cette phrase est lue aux personnes malvoyantes.
+                    Par exemple : Affiche du bal du 25 octobre avec le duo Guilloux, accordéon et chant.</p>
+                </div>
+              </fieldset>
+
+              <div class="g-actions">
+                <button type="submit" class="btn" id="ev-enregistrer">Enregistrer l'évènement</button>
+                <button type="button" class="btn btn-outline" id="ev-annuler">Annuler</button>
+              </div>
+            </form>
+
+            <div class="s-filtre">
+              <label class="choice"><input type="checkbox" id="ev-passes"> Afficher aussi les évènements passés</label>
+            </div>
+            <p class="g-total" id="ev-total" aria-live="polite"></p>
+            <ol class="g-liste" id="ev-liste"></ol>
+          </section>
+
+          <!-- ===== Annonce ===== -->
+          <section class="s-bloc" id="s-annonce" aria-labelledby="s-annonce-titre">
+            <h2 class="s-titre" id="s-annonce-titre">Annonce</h2>
+            <p class="s-aide">Un message mis en avant en haut des pages du site (changement de salle, bal annulé, nouveauté…).</p>
+            <form class="form s-form" id="an-form" novalidate>
+              <label class="choice"><input type="checkbox" id="an-afficher"> Afficher l'annonce sur le site</label>
+              <div class="field">
+                <label for="an-texte">Texte de l'annonce</label>
+                <textarea id="an-texte" rows="3" maxlength="500"></textarea>
+              </div>
+              <div class="g-actions"><button type="submit" class="btn">Enregistrer l'annonce</button></div>
+            </form>
+          </section>
+
+          <!-- ===== Infos pratiques ===== -->
+          <section class="s-bloc" id="s-infos" aria-labelledby="s-infos-titre">
+            <h2 class="s-titre" id="s-infos-titre">Infos pratiques et tarifs</h2>
+            <p class="s-aide">Affichées sur la page d'accueil. Une case laissée vide n'est pas affichée.</p>
+            <form class="form s-form" id="in-form" novalidate>
+              <div class="s-grille">
+                <div class="field"><label for="in-horaires">Horaires</label><input type="text" id="in-horaires" maxlength="200"></div>
+                <div class="field"><label for="in-billetterie">Billetterie</label><input type="text" id="in-billetterie" maxlength="200"></div>
+                <div class="field"><label for="in-entree">Entrée</label><input type="text" id="in-entree" maxlength="200"></div>
+                <div class="field"><label for="in-adhesion">Adhérents</label><input type="text" id="in-adhesion" maxlength="200"></div>
+                <div class="field"><label for="in-buvette">Buvette</label><input type="text" id="in-buvette" maxlength="200"></div>
+                <div class="field"><label for="in-parking">Parking</label><input type="text" id="in-parking" maxlength="200"></div>
+              </div>
+              <div class="g-actions"><button type="submit" class="btn">Enregistrer les infos pratiques</button></div>
+            </form>
+          </section>
+
+          <!-- ===== Salles ===== -->
+          <section class="s-bloc" id="s-salles" aria-labelledby="s-salles-titre">
+            <h2 class="s-titre" id="s-salles-titre">Salles</h2>
+            <p class="s-aide">La liste des salles affichée sur l'accueil, et proposée quand vous ajoutez un évènement.
+              Pour des raisons de sécurité, n'indiquez pas l'adresse exacte.</p>
+            <form class="form s-form" id="sa-form" novalidate>
+              <ol class="s-lignes" id="sa-liste"></ol>
+              <p><button type="button" class="btn btn-outline" id="sa-ajouter">Ajouter une salle</button></p>
+              <div class="g-actions"><button type="submit" class="btn">Enregistrer les salles</button></div>
+            </form>
+          </section>
+
+          <!-- ===== Danses ===== -->
+          <section class="s-bloc" id="s-danses" aria-labelledby="s-danses-titre">
+            <h2 class="s-titre" id="s-danses-titre">Danses</h2>
+            <p class="s-aide">Les danses pratiquées au bal, affichées sur la page d'accueil.</p>
+            <form class="form s-form" id="da-form" novalidate>
+              <ol class="s-lignes s-simple" id="da-liste"></ol>
+              <p><button type="button" class="btn btn-outline" id="da-ajouter">Ajouter une danse</button></p>
+              <div class="g-actions"><button type="submit" class="btn">Enregistrer les danses</button></div>
+            </form>
+          </section>
+
+          <p class="note">Chaque enregistrement est visible sur le site immédiatement (actualisez la page du site si elle était déjà ouverte).</p>
+        </div>
+
+        <p class="center" style="margin-top:2.5rem"><a class="btn btn-outline" href="admin.html">Retour à l'espace gestionnaires</a></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

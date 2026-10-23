@@ -435,3 +435,40 @@ main:focus { outline: none; }
 @media print {
   .site-header nav, .menu-toggle, .form, .agenda-controls { display: none; }
 }
+
+/* ---------- Page « Mettre à jour le site » ---------- */
+.s-sommaire { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.5rem 0 0.5rem; }
+.s-sommaire a { display: inline-flex; align-items: center; min-height: 52px; padding: 0.5rem 1.1rem; border: 1px solid var(--line-strong); border-radius: var(--radius); color: var(--black); text-decoration: none; font-weight: 600; }
+.s-sommaire a:hover { border-color: var(--btn); color: var(--btn); }
+.s-bloc { border-top: 1px solid var(--line); padding: 2rem 0 1rem; margin-top: 1.5rem; scroll-margin-top: 1rem; }
+.s-titre { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.9rem; margin: 0 0 0.4rem; }
+.s-sous-titre { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.5rem; margin: 0 0 1.2rem; }
+.s-aide { color: var(--grey); margin: 0 0 1rem; }
+.s-form { margin-top: 1rem; }
+form.s-form#ev-form { border: 2px solid var(--btn); border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0 2rem; }
+.s-grille { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+.s-image-apercu { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+.s-image-apercu img { max-width: 220px; max-height: 220px; border: 1px solid var(--line); border-radius: var(--radius); }
+.s-filtre { margin: 0.5rem 0; }
+.s-lignes { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.8rem; }
+.s-lignes li { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.8rem; align-items: end; border: 1px solid var(--line); border-radius: var(--radius); padding: 0.9rem 1rem; }
+.s-lignes.s-simple li { grid-template-columns: 1fr auto; }
+.s-lignes .field { margin: 0; }
+.s-lignes .field > label { font-size: 1rem; }
+.s-lignes .btn { text-transform: none; letter-spacing: 0; font-size: 1rem; }
+.ev-carte-img { float: right; margin: 0 0 0.6rem 1rem; }
+.ev-carte-img img { width: 110px; height: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.g-carte.ev-passe { border-left-color: var(--line); }
+.g-carte.ev-passe .g-nom { color: var(--grey); }
+@media (max-width: 760px) {
+  .s-grille { grid-template-columns: 1fr; }
+  .s-lignes li, .s-lignes.s-simple li { grid-template-columns: 1fr; }
+  .ev-carte-img { float: none; margin: 0 0 0.8rem; }
+}
+.s-image-apercu[hidden] { display: none; }
+.s-image .btn, form.s-form .g-actions .btn { text-transform: none; letter-spacing: 0; font-size: 1.05rem; }
+.form input[type="file"] { display: block; width: 100%; font: inherit; font-size: 1rem; padding: 0.6rem 0; }
+.form input[type="file"]::file-selector-button {
+  min-height: 52px; margin-right: 1rem; padding: 0.6rem 1.2rem; font: inherit; font-weight: 600;
+  color: var(--btn); background: var(--white); border: 2px solid var(--btn); border-radius: var(--radius); cursor: pointer;
+}

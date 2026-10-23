@@ -9,7 +9,7 @@
 
 /* Contenus de secours : utilisés si le dossier data/ ne peut pas être lu
    (par exemple quand on ouvre index.html directement depuis son ordinateur).
-   En ligne, ce sont les fichiers data/agenda.json et data/infos.json qui comptent. */
+   En ligne, c'est la base (page « Mettre à jour le site ») qui compte, puis data/agenda.json et data/infos.json. */
 const AGENDA_SECOURS = [
   {
     "date": "2026-10-25",
@@ -273,20 +273,46 @@ function initMenu() {
   });
 }
 
-/* ---------- 2. Contenus du dossier data/ ---------- */
+/* ---------- 2. Contenus du site (base Supabase, sinon dossier data/) ---------- */
+// Les gestionnaires modifient l'agenda et les infos depuis la page « Mettre à jour le site » :
+// ces contenus sont rangés dans la base. Les fichiers data/ servent de secours.
 async function getJSON(path) {
   const res = await fetch(path, { cache: "no-cache" });
   if (!res.ok) throw new Error(path + " : " + res.status);
   return res.json();
 }
 
-async function loadContent() {
-  const [infos, agenda] = await Promise.allSettled([
-    getJSON("data/infos.json"),
-    getJSON("data/agenda.json")
-  ]);
+// Lecture publique d'une table de la base (sans la bibliothèque, pour rester léger)
+async function getBase(chemin) {
+  const c = window.BAL_CONFIG || {};
+  if (!configOk(c)) throw new Error("base non configurée");
+  const headers = { apikey: c.SUPABASE_ANON_KEY, Accept: "application/json" };
+  if (c.SUPABASE_ANON_KEY.startsWith("eyJ")) headers.Authorization = "Bearer " + c.SUPABASE_ANON_KEY;
+  const res = await fetch(c.SUPABASE_URL + "/rest/v1/" + chemin, { headers, cache: "no-cache" });
+  if (!res.ok) throw new Error(chemin + " : " + res.status);
+  return res.json();
+}
 
-  // Si un fichier ne peut pas être lu, le texte déjà présent dans la page reste affiché.
+async function chargerInfos() {
+  try {
+    const rows = await getBase("reglages?cle=eq.infos&select=valeur");
+    if (Array.isArray(rows) && rows[0] && rows[0].valeur) return rows[0].valeur;
+  } catch (e) { /* secours ci-dessous */ }
+  return getJSON("data/infos.json");
+}
+
+async function chargerAgenda() {
+  try {
+    const rows = await getBase("evenements?select=date,titre,type,heure,lieu,details,image,image_description&order=date.asc");
+    if (Array.isArray(rows) && rows.length) return rows;
+  } catch (e) { /* secours ci-dessous */ }
+  return getJSON("data/agenda.json");
+}
+
+async function loadContent() {
+  const [infos, agenda] = await Promise.allSettled([chargerInfos(), chargerAgenda()]);
+
+  // Si rien ne peut être lu, le texte déjà présent dans la page reste affiché.
   if (infos.status === "fulfilled" && infos.value) {
     const i = infos.value;
     renderAnnonce(i.annonce);
@@ -505,7 +531,13 @@ function renderNextBal(e) {
 /* ---------- Image d'un évènement (affiche, photo) ---------- */
 // Chemin : enlève le « / » initial ajouté par l'espace gestionnaires,
 // pour que l'image fonctionne aussi quand le site est dans un sous-dossier.
-function assetPath(p) { return String(p || "").trim().replace(/^\/+/, ""); }
+// Une affiche envoyée depuis le site a une adresse complète (https://…supabase.co/storage/…).
+function assetPath(p) {
+  const v = String(p || "").trim();
+  if (/^https:\/\//i.test(v)) return v;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(v)) return "";   // refuse tout autre protocole
+  return v.replace(/^\/+/, "");
+}
 
 function eventImage(e, cls) {
   const src = assetPath(e.image);
@@ -683,7 +715,7 @@ function getDatabase() {
   return dbClient;
 }
 
-// Transforme le formulaire en fiche pour la base (mêmes noms que supabase/installation.sql)
+// Transforme le formulaire en fiche pour la base (mêmes noms que supabase/1-installation.sql)
 function toRecord(form, type) {
   const v = name => {
     const el = form.elements[name];
