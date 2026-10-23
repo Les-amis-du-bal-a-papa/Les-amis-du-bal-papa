@@ -46,7 +46,9 @@ create table if not exists public.gestionnaires (
 );
 
 insert into public.gestionnaires (email)
-values ('lesamisdubal@gmail.com')
+values
+  ('lesamisdubal@gmail.com'),       -- l'association
+  ('jimmynewtonson@hotmail.com')    -- administrateur du site (tests)
 on conflict do nothing;
 
 -- Vrai si la personne connectée figure dans la liste des gestionnaires

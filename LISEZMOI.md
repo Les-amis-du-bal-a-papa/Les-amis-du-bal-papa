@@ -46,7 +46,8 @@ Seuls les gestionnaires connectés peuvent les lire.
    région **West EU (Paris)**, offre **Free**.
 3. Menu *SQL Editor* → *New query* : coller tout le fichier `supabase/installation.sql`, puis *Run*.
 4. Menu *Authentication* :
-   - *Users* → *Add user* → *Create new user* : `lesamisdubal@gmail.com` (cocher « Auto confirm user ») ;
+   - *Users* → *Add user* → *Create new user* : `lesamisdubal@gmail.com` (cocher « Auto confirm user »),
+     puis de même `jimmynewtonson@hotmail.com` (administrateur du site, pour les tests) ;
    - *Sign In / Providers* (ou *Settings*) : désactiver « Allow new users to sign up » ;
    - *URL Configuration* : « Site URL » = l'adresse du site, et ajouter dans « Redirect URLs »
      l'adresse de la page `…/gestion-inscriptions.html`.

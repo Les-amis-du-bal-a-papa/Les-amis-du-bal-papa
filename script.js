@@ -12,14 +12,190 @@
    En ligne, ce sont les fichiers data/agenda.json et data/infos.json qui comptent. */
 const AGENDA_SECOURS = [
   {
-    date: "2026-10-25",
-    titre: "Bal avec le duo Jacky et Sandrine Guilloux",
-    type: "the",
-    heure: "15 h – 18 h (billetterie dès 14 h 20)",
-    lieu: "Le Cœur de Mérande, Chambéry",
-    details: "Entrée 10 €. Buvette dès 14 h 20, vente de pâtisseries à partir de 16 h.",
-    image: "/images/evenements/2026-10-25-duo-guilloux.jpg",
-    image_description: "Affiche du bal du dimanche 25 octobre avec le duo Jacky et Sandrine Guilloux, accordéon et chant, à la salle Mérande à Chambéry"
+    "date": "2026-10-25",
+    "titre": "Bal avec le duo Jacky et Sandrine Guilloux",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €. Buvette dès 14 h 20, vente de pâtisseries à partir de 16 h.",
+    "image": "/images/evenements/2026-10-25-duo-guilloux.jpg",
+    "image_description": "Affiche du bal du dimanche 25 octobre avec le duo Jacky et Sandrine Guilloux, accordéon et chant, à la salle Mérande à Chambéry"
+  },
+  {
+    "date": "2027-01-10",
+    "titre": "Bal avec Dolcevita Joe et Enzo",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h."
+  },
+  {
+    "date": "2027-01-24",
+    "titre": "Bal avec Éric Collomb (les Z’érics)",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h."
+  },
+  {
+    "date": "2027-02-14",
+    "titre": "Bal avec Gillou Francony",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h."
+  },
+  {
+    "date": "2027-03-14",
+    "titre": "Bal avec Éric Collomb (les Z’érics)",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h."
+  },
+  {
+    "date": "2027-03-21",
+    "titre": "Bal avec Jean-Robert Chapellet",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h."
+  },
+  {
+    "date": "2027-04-25",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-05-02",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-05-09",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-06-06",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-06-20",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-07-04",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-07-18",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-08-01",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-08-29",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-09-05",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-09-26",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-10-03",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-10-24",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-11-07",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Scarabée, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-11-14",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "La Bisseraine, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-12-05",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Salle à confirmer, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
+  },
+  {
+    "date": "2027-12-19",
+    "titre": "Bal à Papa",
+    "type": "the",
+    "heure": "15 h – 18 h (billetterie dès 14 h 20)",
+    "lieu": "Le Cœur de Mérande, Chambéry",
+    "details": "Entrée 10 €, libre pour les adhérents. Buvette dès 14 h 20, pâtisseries à partir de 16 h. Orchestre annoncé dans l’agenda trimestriel."
   }
 ];
 
@@ -114,7 +290,7 @@ async function loadContent() {
   if (infos.status === "fulfilled" && infos.value) {
     const i = infos.value;
     renderAnnonce(i.annonce);
-    renderList("salles-liste", (i.salles || []).map(s => s && s.nom));
+    renderSalles(i.salles);
     renderList("danses-liste", i.styles);
     renderInfos(i.pratique);
   }
@@ -137,12 +313,22 @@ function renderList(id, items) {
   box.innerHTML = clean.map(x => `<li>${escapeHtml(x)}</li>`).join("");
 }
 
+// Salles : le nom et une information facultative (ex. « Parking gratuit »), jamais l'adresse
+function renderSalles(list) {
+  const box = document.getElementById("salles-liste");
+  const clean = (list || []).filter(x => x && String(x.nom || "").trim());
+  if (!box || !clean.length) return;
+  box.innerHTML = clean.map(x =>
+    `<li><strong>${escapeHtml(x.nom)}</strong>${x.infos ? `<span class="salle-info">${escapeHtml(x.infos)}</span>` : ""}</li>`
+  ).join("");
+}
+
 function renderInfos(p) {
   const box = document.getElementById("infos-liste");
   if (!box || !p) return;
   const lignes = [
     ["Horaires", p.horaires], ["Billetterie", p.billetterie],
-    ["Entrée", p.entree], ["Adhérents", p.adhesion], ["Buvette", p.buvette]
+    ["Entrée", p.entree], ["Adhérents", p.adhesion], ["Buvette", p.buvette], ["Parking", p.parking]
   ].filter(([, v]) => String(v || "").trim());
   if (lignes.length) box.innerHTML = lignes.map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHtml(v)}</dd></div>`).join("");
 }

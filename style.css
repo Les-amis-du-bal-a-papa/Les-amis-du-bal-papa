@@ -207,6 +207,7 @@ main:focus { outline: none; }
 .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
 .plain-list { list-style: none; padding: 0; margin: 0 0 1rem; }
 .plain-list li { padding: 0.7rem 0; border-bottom: 1px solid var(--line); color: var(--black); font-weight: 600; font-size: 1.15rem; }
+.plain-list .salle-info { display: block; font-weight: 400; font-size: 1rem; color: var(--grey); }
 .infos { margin: 0; }
 .infos div { padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
 .infos dt { color: var(--grey); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; }

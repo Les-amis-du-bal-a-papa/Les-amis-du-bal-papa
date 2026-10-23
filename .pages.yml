@@ -56,6 +56,8 @@ content:
               label: "Le Scarabée"
             - name: "La Bisseraine, Chambéry"
               label: "La Bisseraine"
+            - name: "Salle à confirmer, Chambéry"
+              label: "Salle à confirmer"
       - name: details
         label: "Informations complémentaires (orchestre, tarif…) – facultatif"
         type: text
@@ -106,6 +108,9 @@ content:
           - name: buvette
             label: "Buvette et pâtisseries"
             type: string
+          - name: parking
+            label: "Parking"
+            type: string
       - name: salles
         label: "Salles (nom uniquement, sans adresse)"
         type: object
@@ -116,5 +121,5 @@ content:
             type: string
             required: true
           - name: infos
-            label: "Information complémentaire (facultatif)"
+            label: "Information complémentaire, ex. « Parking gratuit » (facultatif)"
             type: string

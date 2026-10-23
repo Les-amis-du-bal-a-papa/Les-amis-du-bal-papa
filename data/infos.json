@@ -3,17 +3,36 @@
     "afficher": false,
     "texte": "Prochain bal : dimanche 25 octobre au Cœur de Mérande avec le duo Jacky et Sandrine Guilloux."
   },
-  "styles": ["Rock", "Tango", "Valse", "Cha-cha", "Fox-trot", "Paso doble", "Bachata", "Danse en ligne"],
+  "styles": [
+    "Rock",
+    "Tango",
+    "Valse",
+    "Cha-cha",
+    "Fox-trot",
+    "Paso doble",
+    "Bachata",
+    "Danse en ligne"
+  ],
   "pratique": {
     "horaires": "15 h – 18 h",
     "billetterie": "Ouverture à 14 h 20",
     "entree": "10 €",
-    "adhesion": "45 € pour l'année",
-    "buvette": "Dès 14 h 20 – vente de pâtisseries à partir de 16 h"
+    "adhesion": "45 € pour l'année – entrée libre à tous les bals",
+    "buvette": "Dès 14 h 20 – vente de pâtisseries à partir de 16 h",
+    "parking": "Gratuit dans les trois salles"
   },
   "salles": [
-    { "nom": "Le Cœur de Mérande" },
-    { "nom": "Le Scarabée" },
-    { "nom": "La Bisseraine" }
+    {
+      "nom": "Le Cœur de Mérande",
+      "infos": "Parking gratuit"
+    },
+    {
+      "nom": "Le Scarabée",
+      "infos": "Parking gratuit"
+    },
+    {
+      "nom": "La Bisseraine",
+      "infos": "Parking gratuit"
+    }
   ]
 }
