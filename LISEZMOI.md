@@ -63,6 +63,10 @@ Seuls les gestionnaires connectés peuvent les lire.
 6. Envoyer `config.js` sur GitHub. Faire un essai : une inscription depuis le site, puis l'ouvrir sur
    `gestion-inscriptions.html`.
 
+**E-mail de connexion aux couleurs de l'association** : *Authentication* → *Emails* → *Templates* →
+« Magic link or OTP ». Objet : `Votre accès à l'espace gestionnaires – Les amis du bal à Papa`.
+Corps : coller tout le contenu de `supabase/email-lien-connexion.html`, puis *Save*.
+
 **Mise en pause** : un projet gratuit est mis en pause après 7 jours sans activité. La tâche
 `.github/workflows/garder-actif.yml` interroge la base tous les 3 jours pour l'éviter
 (onglet *Actions* du dépôt : l'autoriser si GitHub le demande). GitHub suspend ces tâches après

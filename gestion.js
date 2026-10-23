@@ -11,6 +11,7 @@ const STATUTS = { nouvelle: "Nouvelle", confirmee: "Confirmée", annulee: "Annul
 
 let db = null;
 let toutes = [];
+let agenda = [];   // bals et stages (data/agenda.json), pour rédiger les confirmations
 
 document.addEventListener("DOMContentLoaded", demarrer);
 
@@ -95,6 +96,10 @@ async function charger() {
     return erreur("Les inscriptions n'ont pas pu être chargées. Réessayez avec le bouton « Actualiser ».");
   }
   toutes = data || [];
+  try {
+    const res = await fetch("data/agenda.json", { cache: "no-cache" });
+    if (res.ok) agenda = await res.json();
+  } catch (e) { /* sans agenda, l'e-mail reste rédigé, sans salle ni horaires */ }
   remplirFiltreEvenements();
   afficher();
 }
@@ -148,6 +153,7 @@ function afficher() {
   ol.querySelectorAll("[data-statut]").forEach(s => s.addEventListener("change", () => changerStatut(s.dataset.statut, s.value)));
   ol.querySelectorAll("[data-note]").forEach(b => b.addEventListener("click", () => enregistrerNote(b.dataset.note)));
   ol.querySelectorAll("[data-suppr]").forEach(b => b.addEventListener("click", () => supprimer(b.dataset.suppr)));
+  ol.querySelectorAll("[data-confirmer]").forEach(a => a.addEventListener("click", () => apresConfirmation(a.dataset.confirmer)));
 }
 
 function carte(i) {
@@ -189,6 +195,7 @@ function carte(i) {
       <textarea id="note-${i.id}" rows="2">${html(i.note_gestionnaire || "")}</textarea>
     </div>
     <div class="g-actions">
+      <a class="btn" href="${html(mailConfirmation(i))}" data-confirmer="${i.id}">Envoyer la confirmation<span class="visually-hidden"> à ${nom}</span></a>
       <button type="button" class="btn btn-outline" data-note="${i.id}">Enregistrer la note</button>
       <button type="button" class="btn btn-danger" data-suppr="${i.id}">Supprimer<span class="visually-hidden"> l'inscription de ${nom}</span></button>
     </div>
@@ -257,6 +264,72 @@ function exporter() {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
+
+/* ---------- E-mail de confirmation (ouvert dans la messagerie du gestionnaire) ---------- */
+const SIGNATURE = "Les amis du bal à Papa\n07 69 11 41 50 – lesamisdubal@gmail.com";
+
+function mailConfirmation(i) {
+  const bonjour = `Bonjour ${i.prenom} ${i.nom},`;
+  let sujet, corps;
+  if (i.type === "evenement") {
+    const ev = agenda.find(e => e.date === i.evenement_date) || {};
+    const quand = i.evenement_date ? jourLong(i.evenement_date) : "";
+    const n = i.nombre_personnes || 1;
+    sujet = `Confirmation de votre inscription – ${ev.titre || "Bal"}${quand ? ` du ${quand}` : ""}`;
+    corps = [
+      bonjour, "",
+      "Nous avons bien reçu votre inscription et nous la confirmons avec plaisir :", "",
+      `• Évènement : ${ev.titre || i.evenement || ""}`,
+      quand ? `• Date : ${capital(quand)}` : null,
+      ev.heure ? `• Horaires : ${ev.heure}` : null,
+      ev.lieu ? `• Salle : ${ev.lieu}` : null,
+      `• Nombre de personnes : ${n}`, "",
+      "L'entrée (10 €) se règle sur place, à la billetterie ; elle est libre pour les adhérents.",
+      "Le parking est gratuit.", "",
+      "Au plaisir de vous retrouver sur la piste !", "",
+      SIGNATURE
+    ];
+  } else {
+    const prochain = agenda.filter(e => e.date >= aujourdhui() && e.type === "the").sort((a, b) => a.date.localeCompare(b.date))[0];
+    sujet = "Votre adhésion aux Amis du bal à Papa";
+    corps = [
+      bonjour, "",
+      "Nous avons bien reçu votre demande d'adhésion et nous vous souhaitons la bienvenue parmi les Amis du bal à Papa !", "",
+      "L'adhésion est de 45 € pour l'année et vous donne l'entrée libre à tous nos bals.",
+      "Le règlement se fait sur place, à la billetterie de votre premier bal.",
+      prochain ? "" : null,
+      prochain ? `Notre prochain bal : ${jourLong(prochain.date)}${prochain.lieu ? `, ${prochain.lieu}` : ""}${prochain.heure ? `, ${prochain.heure}` : ""}.` : null,
+      "Toutes les dates sont dans l'agenda du site.", "",
+      "Au plaisir de vous retrouver sur la piste !", "",
+      SIGNATURE
+    ];
+  }
+  const texte = corps.filter(l => l !== null).join("\r\n");
+  return `mailto:${encodeURIComponent(i.email)}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(texte)}`;
+}
+
+// La messagerie s'ouvre ; une fiche « Nouvelle » passe en « Confirmée » (modifiable ensuite)
+async function apresConfirmation(id) {
+  const i = toutes.find(x => x.id === id);
+  if (!i) return;
+  if (i.statut === "nouvelle") {
+    await changerStatut(id, "confirmee");
+    info(`Votre messagerie s'ouvre avec l'e-mail pour ${i.prenom} ${i.nom} : relisez-le puis cliquez sur « Envoyer ». La fiche est passée en « Confirmée ».`, false);
+  } else {
+    info(`Votre messagerie s'ouvre avec l'e-mail pour ${i.prenom} ${i.nom} : relisez-le puis cliquez sur « Envoyer ».`, false);
+  }
+}
+
+function aujourdhui() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function jourLong(iso) {
+  const [y, m, d] = String(iso).slice(0, 10).split("-").map(Number);
+  const jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  return `${jours[new Date(y, m - 1, d).getDay()]} ${d} ${MOIS[m - 1]} ${y}`;
+}
+function capital(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /* ---------- Petits outils ---------- */
 function $(id) { return document.getElementById(id); }
